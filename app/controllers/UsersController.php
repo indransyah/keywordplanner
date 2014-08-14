@@ -2,6 +2,12 @@
 
 class UsersController extends \BaseController {
 
+    public function __construct()
+    {
+        $this->beforeFilter('auth', array('except' => array('getLogin', 'postLogin')));
+    }
+
+
 	public function getIndex()
 	{
 		$users = User::all();

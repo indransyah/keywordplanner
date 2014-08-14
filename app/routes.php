@@ -11,14 +11,13 @@
 |
 */
 
-// Route::pattern('id', '[0-9]+');
-// Route::pattern('criterion_id', '[0-9]+');
+Route::pattern('id', '[0-9]+');
+Route::pattern('criterion_id', '[0-9]+');
 
 Route::get('/', 'HomeController@getIndex');
 Route::controller('home', 'HomeController');
 Route::controller('keyword', 'KeywordsController');
 
-Route::get('user/login', array('before' => 'guest', 'uses' => 'UsersController@getLogin'));
 Route::controller('user', 'UsersController');
 Route::controller('pairwisecomparison', 'PairwisecomparisonsController');
 
