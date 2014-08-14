@@ -1,0 +1,149 @@
+body{
+	font-family: 'Lato', sans-serif;
+	padding-top: 50px;
+	font-size: 14px;
+	color: #434A54;
+}
+.navbar-brand			{font-weight: 700}
+.navbar-header{text-align: center;}
+.navbar-brand{display: inline-block; float: none;}
+.btn-sidebar-collapse{
+	font-size: 14px;
+	position: relative;
+	top: -3px;
+	left: -5px;
+	display: none;
+}
+.page-wrapping{
+	position: relative;
+	/*background: #F5F7FA;*/
+}
+.sidebar{
+	width: 250px;
+	min-height: 100%;
+	background: #2C3139;
+	padding: 0;
+	margin: 0;
+	position: fixed;
+	top: 50px;
+	bottom: 0;
+	left: 0;
+	transition:All 0.3s ease;
+	-webkit-transition:All 0.3s ease;
+	-moz-transition:All 0.3s ease;
+	-o-transition:All 0.3s ease;
+	z-index: 3;
+	overflow-y: hidden;
+}
+
+ul.stacked-menu{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+ul.stacked-menu li{
+	display: block;
+}
+ul.stacked-menu li a{
+	display: block;
+	height: 42px;
+	padding: 10px 15px;
+	color: #E6E9ED;
+	border-bottom: 1px solid #343B43;
+	text-decoration: none;
+}
+ul.stacked-menu li a .right-icon{
+	float:right;
+	color: #AAB2BD;
+	position: relative;
+	top: 3px;
+}
+ul.stacked-menu li.active a{
+	color: #fff;
+	background-color: #24292E;
+	border-bottom-color: #212729;
+}
+ul.stacked-menu li a:hover{
+	background-color: #24292E;
+}
+ul.stacked-menu li ul{
+	background-color: #24292E;
+	padding: 0;
+	margin: 0;
+	display: none;
+}
+ul.stacked-menu li ul.visible{
+	display: block;
+}
+ul.stacked-menu li ul li a:before,
+ul.stacked-menu li.active ul li a:before {
+	padding: 0 5px;
+	content: "\203A";
+}
+ul.stacked-menu li.active ul li a,
+ul.stacked-menu li ul li a{
+	height: 35px;
+	padding: 7px 20px 7px 30px;
+	color: #AAB2BD;
+	border-bottom: 1px solid #212729;
+	text-decoration: none;
+}
+ul.stacked-menu li.active ul li a:hover,
+ul.stacked-menu li ul li a:hover{
+	background-color: #212729;
+}
+
+.content-page{
+	min-height: 100%;
+	height: 100%;
+	padding: 0;
+	z-index: 4;
+	/*position: relative;*/
+	top: 0px;
+	margin-left: 250px;
+	transition:All 0.3s ease;
+	-webkit-transition:All 0.3s ease;
+	-moz-transition:All 0.3s ease;
+	-o-transition:All 0.3s ease;
+}
+
+.content-page-inner{
+	padding: 15px;
+	line-height: 170%;
+	font-size: 15px;
+}
+
+.the-box{
+	background: #fff;
+	padding: 30px;
+	margin-bottom: 30px;
+}
+
+.the-box.full{
+	padding: 0px;
+}
+
+
+
+@media (max-width: 767px) {
+	.page-wrapping{
+		overflow-x: hidden;
+	}
+	.btn-sidebar-collapse{
+		display: inline-block;
+	}
+	.sidebar{
+		left: -250px;
+		overflow-y: auto;
+	}
+	.sidebar.collapse-sidebar{
+		left: 0px;
+	}
+	.content-page{
+		margin-left: 0px;
+		left: 0;
+	}
+	.content-page.collapse-content{
+		left: 250px;
+	}
+}
