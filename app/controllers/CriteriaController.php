@@ -10,9 +10,6 @@ class CriteriaController extends \BaseController {
 	 */
 	public function index()
 	{
-		// return Criterion::with('subcriteria')->get();
-		// return Subcriterion::with('criteria')->get();
-		// return Criterion::with('comparecriteria')->get();		
 
 		$criteria = Criterion::all();
         $this->layout->content = View::make('criteria.index')->with('criteria', $criteria);
@@ -26,6 +23,12 @@ class CriteriaController extends \BaseController {
 	 */
 	public function create()
 	{
+		// Check max criteria = 4
+		$max = count(Criterion::all());
+		if ($max==4) {
+			return Redirect::to('criteria')->with('error', 'Just 4 criteria allowed!');
+		}
+
 		$this->layout->content = View::make('criteria.create');
 	}
 
@@ -37,6 +40,12 @@ class CriteriaController extends \BaseController {
 	 */
 	public function store()
 	{
+		// Check max criteria = 4
+		$max = count(Criterion::all());
+		if ($max==4) {
+			return Redirect::to('criteria')->with('error', 'Just 4 criteria allowed!');
+		}
+		
 		$validator = Validator::make(Input::all(), Criterion::$rules);
         if ($validator->passes()) {
             $criterion = new Criterion;

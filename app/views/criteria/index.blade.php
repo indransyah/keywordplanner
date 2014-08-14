@@ -11,6 +11,12 @@
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
+@if (Session::has('error'))
+<div class="alert alert-danger square fade in alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>{{ Session::get('error') }}</strong>
+</div>
+@endif
 <h1 class="page-header" style="margin-top:0;">Criteria</h1>
 <!-- Kriteria -->
 @if(count($criteria)==0)
