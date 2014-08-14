@@ -6,7 +6,8 @@ class Criterion extends \Eloquent {
     public $timestamps = false;
     public static $rules = array(
         'criterion' => 'required|unique:criteria,criterion|max:30',
-        'description' => 'required|max:200'
+        'description' => 'required|max:200',
+        'field' => 'required|unique:criteria,field'
     );
 
     public function subcriteria()

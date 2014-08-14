@@ -17,6 +17,7 @@ class CreateCriteriaTable extends Migration {
 			$table->increments('criterion_id');
 			$table->string('criterion',20);
 			$table->longText('description');
+			$table->string('field',20);
 			$table->decimal('tpv',5,2);
 		});
 	}

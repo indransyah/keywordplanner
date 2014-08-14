@@ -2,13 +2,6 @@
 
 class SubcriteriaController extends \BaseController {
 
-	protected $fields = array(
-        'word' => 'Word',
-        'search' => 'Search',
-        'bid' => 'BID',
-        'competition' => 'Competition'
-    );
-
 	/**
 	 * Display a listing of the resource.
 	 * GET /subcriterias
@@ -33,7 +26,7 @@ class SubcriteriaController extends \BaseController {
         }
         $criterion = Criterion::where('criterion_id', '=', $criterion_id)->count();
         if ($criterion) {
-            $this->layout->content = View::make('subcriteria.create')->with('criterion_id', $criterion_id)->with('fields', $this->fields);
+            $this->layout->content = View::make('subcriteria.create')->with('criterion_id', $criterion_id);
         } else {
             return Redirect::to('criteria');
         }
@@ -55,7 +48,6 @@ class SubcriteriaController extends \BaseController {
             $subcriterion = new Subcriterion;
             $subcriterion->subcriterion = Input::get('subcriterion');
             $subcriterion->description = Input::get('description');
-            $subcriterion->field = Input::get('field');
             $subcriterion->conditional = Input::get('conditional');
             $subcriterion->criterion_id = $criterion_id;
             $subcriterion->save();
@@ -95,8 +87,7 @@ class SubcriteriaController extends \BaseController {
             $this->layout->content = View::make('subcriteria.edit')->with(array(
                 // 'id' => $id,
                 'criterion_id' => $criterion_id,
-                'subcriterion' => $subcriterion,
-                'fields' => $this->fields
+                'subcriterion' => $subcriterion
                 )
             );
         } else {
@@ -121,7 +112,6 @@ class SubcriteriaController extends \BaseController {
             $subcriterion = Subcriterion::find($id);
             $subcriterion->subcriterion = Input::get('subcriterion');
             $subcriterion->description = Input::get('description');
-            $subcriterion->field = Input::get('field');
             $subcriterion->conditional = Input::get('conditional');
             $subcriterion->save();
             return Redirect::to('criteria/' . $criterion_id)

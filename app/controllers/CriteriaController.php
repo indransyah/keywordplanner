@@ -2,6 +2,13 @@
 
 class CriteriaController extends \BaseController {
 
+	protected $fields = array(
+        'word' => 'Word',
+        'search' => 'Search',
+        'bid' => 'BID',
+        'competition' => 'Competition'
+    );
+
 	/**
 	 * Display a listing of the resource.
 	 * GET /criterias
@@ -29,7 +36,7 @@ class CriteriaController extends \BaseController {
 			return Redirect::to('criteria')->with('error', 'Just 4 criteria allowed!');
 		}
 
-		$this->layout->content = View::make('criteria.create');
+		$this->layout->content = View::make('criteria.create')->with('fields', $this->fields);
 	}
 
 	/**
@@ -45,17 +52,18 @@ class CriteriaController extends \BaseController {
 		if ($max==4) {
 			return Redirect::to('criteria')->with('error', 'Just 4 criteria allowed!');
 		}
-		
 		$validator = Validator::make(Input::all(), Criterion::$rules);
         if ($validator->passes()) {
             $criterion = new Criterion;
             $criterion->criterion = Input::get('criterion');
             $criterion->description = Input::get('description');
+            $criterion->field = Input::get('field');
             $criterion->save();
             return Redirect::to('criteria')
                             ->with('success', 'Criterion successfully added!');
         } else {
             return Redirect::to('criteria/create')
+            				->with('fields', $this->fields)
                             ->with('error', 'The following errors occurred')
                             ->withErrors($validator)
                             ->withInput();
@@ -93,7 +101,7 @@ class CriteriaController extends \BaseController {
 	{
 		$criterion = Criterion::find($id);
         if ($criterion) {
-            $this->layout->content = View::make('criteria.edit')->with('criterion', $criterion);
+            $this->layout->content = View::make('criteria.edit')->with('criterion', $criterion)->with('fields', $this->fields);
         } else {
             return Redirect::to('criteria');
         }
@@ -113,10 +121,12 @@ class CriteriaController extends \BaseController {
             $criterion = Criterion::find($id);
             $criterion->criterion = Input::get('criterion');
             $criterion->description = Input::get('description');
+            $criterion->field = Input::get('field');
             $criterion->save();
             return Redirect::to('criteria')->with('success', 'Criterion successfully edited!');
         } else {
             return Redirect::to('criteria/' . $id . '/edit')
+            				->with('fields', $this->fields)
                             ->with('error', 'The following errors occurred')
                             ->withErrors($validator)
                             ->withInput();

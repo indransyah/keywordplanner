@@ -29,12 +29,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="field" class="col-sm-2 control-label">Field</label>
-            <div class="col-sm-10">
-                {{ Form::select('field', $fields, null, array('class'=>'form-control','required'=>'true')) }}
-            </div>
-        </div>
-        <div class="form-group">
             <label for="criteria" class="col-sm-2 control-label">Conditional</label>
             <div class="col-sm-10">
                 {{ Form::text('conditional', null, array('class'=>'form-control', 'placeholder'=>'Conditional', 'required'=>'true')) }}
