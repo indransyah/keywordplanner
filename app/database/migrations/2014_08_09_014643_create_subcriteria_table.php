@@ -20,6 +20,7 @@ class CreateSubcriteriaTable extends Migration {
 			$table->string('conditional',50);
 			$table->decimal('tpv',5,2);
 			$table->decimal('rating',5,2);
+			$table->decimal('weight',5,2);
 			$table->integer('criterion_id')->unsigned();
 			$table->foreign('criterion_id')->references('criterion_id')->on('criteria')->onDelete('cascade')->onUpdate('cascade');
 		});

@@ -13,13 +13,18 @@
 @endif
 @if ($CR<=0.1)
 <div class="alert alert-success square fade in alert-dismissable text-left">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>Pairwise Comparison CONSISTENT</strong>
+</div>
+<div class="btn-group pull-right">
+    {{ HTML::link('judgment/subcriteria/'.$criterion_id, 'Change the subcriteria judgments', array('class' => 'btn btn-danger btn-rounded-lg')) }}
 </div>
 @else
 <div class="alert alert-danger square fade in alert-dismissable text-left">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Pairwise Comparison NOT CONSISTENT</strong>
+    <strong>Pairwise Comparison NOT CONSISTENT.</strong> Judgments are not saved in the database.
+</div>
+<div class="btn-group pull-right">
+    {{ HTML::link('pairwisecomparison/subcriteria/'.$criterion_id, 'Show the saved pairwise comparison', array('class' => 'btn btn-success btn-rounded-lg')) }}
+    {{ HTML::link('judgment/subcriteria/'.$criterion_id, 'Change the subcriteria judgments', array('class' => 'btn btn-danger btn-rounded-lg')) }}
 </div>
 @endif
 <h1 class="page-header" style="margin-top:0;">Pairwise Comparison</h1>
@@ -69,6 +74,7 @@
                     @endforeach
                     <td>TPV</td>
                     <td>Rating</td>
+                    <td>Weight</td>
                     <!-- <td>Ax</td> -->
                 </tr>
             </thead>
@@ -82,6 +88,7 @@
                     @endfor
                     <td class="warning">{{ round($tpv[$i], 2) }}</td>
                     <td class="warning">{{ round($rating[$i], 2) }}</td>
+                    <td class="warning">{{ round($weight[$i], 2) }}</td>
                     <!-- <td class="warning">{{ round($Ax[$i], 2) }}</td> -->
                 </tr>
                 <!-- @if($i==($max-1))

@@ -10,10 +10,27 @@ class KeywordsController extends \BaseController {
 
 	public function getImport()
 	{
-		$this->layout->content = View::make('keywords.create');
+        // SEMENTARA DINONAKTIFKAN
+        $consistency = true;
+        // $criteriaConsistency = Ahp::consistency();
+        // foreach (Criterion::all() as $key => $criterion) {
+        //     $subcriteriaConsistency = Ahp::consistency($criterion->criterion_id);
+        //     if ($subcriteriaConsistency==false || $criteriaConsistency==false) {
+        //         $consistency = false;              
+        //     }
+        // }
+		$this->layout->content = View::make('keywords.create')->with('consistency', $consistency);
 	}
 
 	public function postStore() {
+        // SEMENTARA DINONAKTIFKAN
+        /*$criteriaConsistency = Ahp::consistency();
+        foreach (Criterion::all() as $key => $criterion) {
+            $subcriteriaConsistency = Ahp::consistency($criterion->criterion_id);
+            if ($subcriteriaConsistency==false || $criteriaConsistency==false) {
+                return Redirect::to('keyword/import');           
+            }
+        }*/
         if (Input::hasFile('csv')) {
             $file = Input::file('csv');
             $destinationPath = public_path() . '/uploads';
@@ -59,11 +76,19 @@ class KeywordsController extends \BaseController {
                                 $arr[$index][$field] = 0;
                             }
                         }
+                        // Jumlah kata
+                        $arr[$index]['word'] = str_word_count($value['keyword']);
                     }
                     Keyword::where('csv', '=', $filename)->delete();
                     foreach ($arr as $key => $value) {
                         $validator = Validator::make($value, Keyword::$rules);
-                        if ($validator->passes()) {                            
+                        if ($validator->passes()) {
+
+                            // Perhitungan AHP
+                            // return Ahp::process($value);
+                            return $value;
+                            //
+
                             $keyword = new Keyword;
                             // $keyword->group = $value['group'];
                             $keyword->keyword = $value['keyword'];
@@ -77,6 +102,7 @@ class KeywordsController extends \BaseController {
                             // $keyword->extract = $value['extract'];
                             // $keyword->word = str_word_count($value['keyword']);
                             $keyword->csv = $filename;
+                            $keyword->word = $value['word'];
                             $keyword->save();
                         }
                     }

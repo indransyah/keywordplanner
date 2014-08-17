@@ -12,11 +12,17 @@
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
+@if (Session::has('error'))
+<div class="alert alert-danger alert-block fade in alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>{{ Session::get('error') }}</strong>
+</div>
+@endif
 <h1 class="page-header" style="margin-top:0;">Criteria Judgments</h1>
 <!-- Kriteria -->
-@if(count($criteria)<2)
+@if(count($criteria)<3)
 <div class="alert alert-info alert-bold-border fade in alert-dismissable text-center">
-    <strong>Criterion must be at least 2 criteria!</strong>
+    <strong>Criteria must be at least 3 criterion!</strong>
 </div>
 @else
 <div class="row">

@@ -22,7 +22,42 @@ class HomeController extends BaseController {
 
 	public function getIndex()
 	{
-		$this->layout->content = View::make('dashboard');
+		// $criteria = Criterion::with('comparecriteria')->get();
+		// $totalJudgments = count($criteria)*count($criteria);
+		// $tmp = 0;
+		// foreach ($criteria as $key => $criterion) {
+		// 	$tmp = count($criterion->comparecriteria)+$tmp;
+		// }
+		// if ($totalJudgments==$tmp) {
+		// 	return 'con';
+		// } else {
+		// 	return 'not';
+		// }
+		// return count($criteria->comparecriteria);
+
+		$conditional='word';
+		$value = 'word';
+		$range = explode('-', $conditional);
+		if (count($range)==2) {
+			if ($this->range($value, $range[0], $range[1])) {
+				return 'dalam';
+			} else {
+				return 'luar';
+			}
+		} else {
+			if ($value==$conditional) {
+				return 'ok';
+			}
+		}
+		// return count($range);
+
+		// $this->layout->content = View::make('dashboard');
+	}
+
+	public function range($value, $min, $max){
+		if($value < $min) return false;
+		if($value > $max) return false;
+		return true;
 	}
 
 }

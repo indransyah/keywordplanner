@@ -11,6 +11,7 @@ class Keyword extends \Eloquent {
         'search' => 'required|integer',
         'competition' => 'required',
         'bid' => 'required',
+        'word' => 'required|integer',
         // 'impression' => 'required',
         // 'account' => 'required',
         // 'plan' => 'required',

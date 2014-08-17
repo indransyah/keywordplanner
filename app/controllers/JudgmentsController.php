@@ -21,52 +21,9 @@ class JudgmentsController extends \BaseController {
     }
 
     public function getCriteria()
-    {
+    {        
         $criteria = Criterion::all();
         $this->layout->content = View::make('judgments.criteria')->with(array('criteria' => $criteria, 'options' => $this->options));
-        // $criteriaJudgments = CriteriaJudgment::all()->toArray();
-        // if (empty($criteriaJudgments)) {
-        //     $criteria = Criterion::all();
-        //     $this->layout->content = View::make('judgments.criteria')->with(array('criteria' => $criteria, 'options' => $this->options));
-        // } else {
-        //     $i=0;
-        //     foreach (Criterion::with('comparecriteria')->get() as $criteria)
-        //     {
-        //         $j=0;
-        //         foreach ($criteria->comparecriteria as $comparecriteria) {
-        //             $judgments[$i][$j]=$comparecriteria->pivot->judgment;
-        //             $j++;
-        //         }
-        //         $i++;
-        //     }
-        //     $criteria = Criterion::all();
-        //     $max = count($criteria);
-        //     $judgmentTotal = Ahp::total($judgments, $max);
-        //     $normalization = Ahp::normalization($judgments, $judgmentTotal, $max);
-        //     $normalizationTotal = Ahp::total($normalization, $max);
-        //     $tpv = Ahp::tpv($normalization, $max);
-        //     // $rating = Ahp::rating($tpv, $max);
-        //     $Ax = Ahp::Ax($judgments, $tpv, $max);
-        //     $lamda = Ahp::lamda($Ax, $tpv, $max);
-        //     $lamdaMax = array_sum($lamda) / $max;
-        //     $CI = ($lamdaMax - $max) / ($max - 1);
-        //     $CR = $CI / $this->RI[$max];
-        //     $this->layout->content = View::make('judgments.criteriapairwisecomparison')->with(array(
-        //         'criteria' => $criteria,
-        //         'judgments' => $judgments,
-        //         'judgmentTotal' => $judgmentTotal,
-        //         'normalization' => $normalization,
-        //         'normalizationTotal' => $normalizationTotal,
-        //         'tpv' => $tpv,
-        //         // 'rating' => $rating,
-        //         'Ax' => $Ax,
-        //         'lamda' => $lamda,
-        //         'lamdaMax' => $lamdaMax,
-        //         'CI' => $CI,
-        //         'RI' => $this->RI[$max],
-        //         'CR' => $CR
-        //     ));
-        // }
     }
 
     public function getSubcriteria($criterion_id = null)
@@ -78,83 +35,6 @@ class JudgmentsController extends \BaseController {
             'subcriteria' => $subcriteria,
             'options' => $this->options
             ));
-    	
-        // if (empty($criterion_id)) {
-        //     $criteria = Criterion::all();
-        //     // $subcriteria = Subcriterion::all();
-        //     foreach ($criteria as $key => $criterion) {
-        //         $consistency = 'Consistent';
-        //         foreach (Subcriterion::where('criterion_id', $criterion->criterion_id)->get() as $subcriterion) {
-        //             if ($subcriterion->rating == 0) {
-        //                 // $consistency[$criterion->criterion_id] = false;
-        //                 $consistency = 'Not Consistent';
-        //             }
-        //         }
-        //         $criteria[$key]['consistency'] = $consistency;
-        //     }
-        //     // return $criteria[0]->consistency;
-        //     $this->layout->content = View::make('judgments.index')->with('criteria', $criteria);
-        // } else {
-        //     $subcriteria = Subcriterion::where('criterion_id', '=', $criterion_id)->get();
-        //     $this->layout->content = View::make('judgments.subcriteria')->with(array(
-        //         'criterion_id' => $criterion_id,
-        //             // 'criteria' => $criteria,
-        //         'subcriteria' => $subcriteria,
-        //         'options' => $this->options
-        //         ));
-
-        //     // foreach (Subcriterion::where('criterion_id', $criterion_id)->with('comparesubcriteria')->get() as $subcriteria)
-        //     // {
-        //     //     $max = count($subcriteria->comparesubcriteria);
-        //     // }
-        //     // if ($max==0) {
-        //     //     // $criteria = Criterion::find($criterion_id);
-        //     //     $subcriteria = Subcriterion::where('criterion_id', '=', $criterion_id)->get();
-        //     //     $this->layout->content = View::make('judgments.subcriteria')->with(array(
-        //     //         'criterion_id' => $criterion_id,
-        //     //         // 'criteria' => $criteria,
-        //     //         'subcriteria' => $subcriteria,
-        //     //         'options' => $this->options
-        //     //     ));
-        //     // } else {
-        //     //     $i=0;
-        //     //     foreach (Subcriterion::where('criterion_id', $criterion_id)->with('comparesubcriteria')->get() as $subcriteria)
-        //     //     {
-        //     //         $j=0;
-        //     //         foreach ($subcriteria->comparesubcriteria as $comparesubcriteria) {
-        //     //             $judgments[$i][$j]=$comparesubcriteria->pivot->judgment;
-        //     //             $j++;
-        //     //         }
-        //     //         $i++;
-        //     //     }
-        //     //     $subcriteria = Subcriterion::where('criterion_id', $criterion_id)->get();
-        //     //     $judgmentTotal = Ahp::total($judgments, $max);
-        //     //     $normalization = Ahp::normalization($judgments, $judgmentTotal, $max);
-        //     //     $normalizationTotal = Ahp::total($normalization, $max);
-        //     //     $tpv = Ahp::tpv($normalization, $max);
-        //     //     $rating = Ahp::rating($tpv, $max);
-        //     //     $Ax = Ahp::Ax($judgments, $tpv, $max);
-        //     //     $lamda = Ahp::lamda($Ax, $tpv, $max);
-        //     //     $lamdaMax = array_sum($lamda) / $max;
-        //     //     $CI = ($lamdaMax - $max) / ($max - 1);
-        //     //     $CR = $CI / $this->RI[$max];
-        //     //     $this->layout->content = View::make('judgments.subcriteriapairwisecomparison')->with(array(
-        //     //         'subcriteria' => $subcriteria,
-        //     //         'judgments' => $judgments,
-        //     //         'judgmentTotal' => $judgmentTotal,
-        //     //         'normalization' => $normalization,
-        //     //         'normalizationTotal' => $normalizationTotal,
-        //     //         'tpv' => $tpv,
-        //     //         'rating' => $rating,
-        //     //         'Ax' => $Ax,
-        //     //         'lamda' => $lamda,
-        //     //         'lamdaMax' => $lamdaMax,
-        //     //         'CI' => $CI,
-        //     //         'RI' => $this->RI[$max],
-        //     //         'CR' => $CR
-        //     //     ));
-        //     // }
-        // }
     }
 
     public function postPairwisecomparison($criterion_id = null) 

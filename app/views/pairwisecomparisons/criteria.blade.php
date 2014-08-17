@@ -13,16 +13,21 @@
 @endif
 @if ($CR<=0.1)
 <div class="alert alert-success square fade in alert-dismissable text-left">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Pairwise Comparison CONSISTENT</strong>
+    <strong>Pairwise Comparison CONSISTENT.</strong>
+</div>
+<div class="btn-group pull-right">
+    {{ HTML::link('judgment/criteria', 'Change the criteria judgments', array('class' => 'btn btn-danger btn-rounded-lg')) }}
 </div>
 @else
 <div class="alert alert-danger square fade in alert-dismissable text-left">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Pairwise Comparison NOT CONSISTENT</strong>
+    <strong>Pairwise Comparison NOT CONSISTENT.</strong> Judgments are not saved in the database.
+</div>
+<div class="btn-group pull-right">
+    {{ HTML::link('pairwisecomparison/criteria', 'Show the saved pairwise comparison', array('class' => 'btn btn-success btn-rounded-lg')) }}
+    {{ HTML::link('judgment/criteria', 'Change the criteria judgments', array('class' => 'btn btn-danger btn-rounded-lg')) }}
 </div>
 @endif
-<h1 class="page-header" style="margin-top:0;">Pairwise Comparison</h1>
+<h1 class="page-header" style="margin-top:0;">Criteria Pairwise Comparison</h1>
 <div class="the-box full">
     <div class="table-responsive">
         <table class="table table-th-block text-center">

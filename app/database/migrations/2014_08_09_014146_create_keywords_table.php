@@ -20,6 +20,8 @@ class CreateKeywordsTable extends Migration {
 			$table->decimal('competition',5,2);
 			$table->decimal('bid',5,2);
 			$table->string('csv',50);
+			$table->integer('word');
+			$table->decimal('score',5,2);
 			/* Old fields
 			$table->increments('keyword_id');
 			$table->string('group',20);

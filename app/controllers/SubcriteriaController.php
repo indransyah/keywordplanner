@@ -62,18 +62,6 @@ class SubcriteriaController extends \BaseController {
 	}
 
 	/**
-	 * Display the specified resource.
-	 * GET /subcriterias/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
 	 * Show the form for editing the specified resource.
 	 * GET /subcriterias/{id}/edit
 	 *
@@ -133,9 +121,25 @@ class SubcriteriaController extends \BaseController {
 	 */
 	public function destroy($id, $criterion_id)
 	{
+		$subcriteria = Subcriterion::where('criterion_id', $criterion_id)->with('comparesubcriteria')->get();
+		
+		// Delete subcriteria judgments
+		foreach ($subcriteria as $key => $value) {
+			$subcriterion = Subcriterion::find($value['subcriterion_id']);
+			$subcriterion->comparesubcriteria()->detach($value['compared_subcriterion_id'], array('judgment' => $value['judgment']));
+		}
+
+		// Delete subcriteria
 		$subcriterion = Subcriterion::find($id);
         $subcriterion->delete();
-        DB::table('subcriteria_judgments')->where('criterion_id', '=', $criterion_id)->delete();
+        
+        // Delete tpv
+        foreach ($subcriteria as $subcriterion) {
+        	$subcriterion->tpv = 0;
+        	$subcriterion->rating = 0;
+        	$subcriterion->weight = 0;
+        	$subcriterion->save();
+        }
         return Redirect::to('criteria/' . $criterion_id)
                         ->with('success', 'Subcriterion successfully deleted!');
 	}

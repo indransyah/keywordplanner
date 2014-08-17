@@ -56,62 +56,79 @@ class PairwisecomparisonsController extends \BaseController {
                 }
             }
         }
-
         $judgmentTotal = Ahp::total($judgments, $max);
         $normalization = Ahp::normalization($judgments, $judgmentTotal, $max);
         $normalizationTotal = Ahp::total($normalization, $max);
         $tpv = Ahp::tpv($normalization, $max);
         $rating = Ahp::rating($tpv, $max);
+
+        if (!empty($criterion_id)) {
+            $weight = Ahp::weight($rating, $criterion_id, $max);
+        }
+
         $Ax = Ahp::Ax($judgments, $tpv, $max);
         $lamda = Ahp::lamda($Ax, $tpv, $max);
         $lamdaMax = array_sum($lamda) / $max;
         $CI = ($lamdaMax - $max) / ($max - 1);
         $CR = $CI / $this->RI[$max];
         if (round($CR, 2) <= 0.1) {
-            // $consistent = true;
+            // Consistent
             if (empty($criterion_id)) {
 
-                foreach ($data as $key => $value) {
+                // Delete criteria judgments
+                /*foreach ($data as $key => $value) {
                     $criterion = Criterion::find($value['criterion_id']);
                     $criterion->comparecriteria()->detach($value['compared_criterion_id'], array('judgment' => $value['judgment']));
-                }
+                }*/
+                Ahp::clearJudgments(null, $data);
 
-                foreach ($data as $key => $value) {
+                // Add new criteria judgments
+                /*foreach ($data as $key => $value) {
                     $criterion = Criterion::find($value['criterion_id']);
                     $criterion->comparecriteria()->attach($value['compared_criterion_id'], array('judgment' => $value['judgment']));
-                }
+                }*/
+                Ahp::addJudgments(null, $data);
 
                 // Save TPV into database
-                foreach (Criterion::all() as $key => $criterion) {
+                /*foreach (Criterion::all() as $key => $criterion) {
                     $criterion->tpv = $tpv[$key];
                     $criterion->save();
-                }
+                }*/
+                // Ahp::saveTpvRating(null, $tpv);
+                Ahp::saveTpvRatingWeight(null, $tpv, $rating, null);
 
                 return Redirect::to('pairwisecomparison/criteria');
-
             } else {
 
-                foreach ($data as $key => $value) {
+                // Delete subcriteria judgments
+                /*foreach ($data as $key => $value) {
                     $subcriterion = Subcriterion::find($value['subcriterion_id']);
                     $subcriterion->comparesubcriteria()->detach($value['compared_subcriterion_id'], array('judgment' => $value['judgment']));
-                }
+                }*/
+                Ahp::clearJudgments($criterion_id, $data);
 
-                foreach ($data as $key => $value) {
+                // Add new subcriteria judgments
+                /*foreach ($data as $key => $value) {
                     $subcriterion = Subcriterion::find($value['subcriterion_id']);
                     $subcriterion->comparesubcriteria()->attach($value['compared_subcriterion_id'], array('judgment' => $value['judgment']));
-                }
+                }*/
+                Ahp::addJudgments($criterion_id, $data);
 
                 // Save TPV & Rating into database
-                foreach (Subcriterion::where('criterion_id', $criterion_id)->get() as $key => $subcriterion) {
+                /*foreach (Subcriterion::where('criterion_id', $criterion_id)->get() as $key => $subcriterion) {
                     $subcriterion->tpv = $tpv[$key];
                     $subcriterion->rating = $tpv[$key]/max($tpv);
                     $subcriterion->save();
-                }
+                }*/
+                // Ahp::saveTpvRating($criterion_id, $tpv);
+                Ahp::saveTpvRatingWeight($criterion_id, $tpv, $rating, $weight);
 
                 return Redirect::to('pairwisecomparison/subcriteria/'.$criterion_id);
             }            
         } else {
+            // Not Consistent
             if (empty($criterion_id)) {
+                // Show Criteria Pairwise Comparisons
                 $this->layout->content = View::make('pairwisecomparisons.criteria')->with(array(
                     'criteria' => $items,
                     'judgments' => $judgments,
@@ -128,7 +145,9 @@ class PairwisecomparisonsController extends \BaseController {
                     'CR' => $CR
                 ));
             } else {
+                // Show Subcriteria Pairwise Comparisons
                 $this->layout->content = View::make('pairwisecomparisons.subcriteria')->with(array(
+                    'criterion_id' => $criterion_id,
                     'subcriteria' => $items,
                     'judgments' => $judgments,
                     'judgmentTotal' => $judgmentTotal,
@@ -136,6 +155,7 @@ class PairwisecomparisonsController extends \BaseController {
                     'normalizationTotal' => $normalizationTotal,
                     'tpv' => $tpv,
                     'rating' => $rating,
+                    'weight' => $weight,
                     'Ax' => $Ax,
                     'lamda' => $lamda,
                     'lamdaMax' => $lamdaMax,
@@ -149,12 +169,13 @@ class PairwisecomparisonsController extends \BaseController {
 
     public function getCriteria()
     {
-
-        $criteriaJudgments = CriteriaJudgment::all()->toArray();
-        if (empty($criteriaJudgments)) {
-            return Redirect::to('judgment/criteria');
+        // Check consistency
+        $consistency = Ahp::consistency();
+        if ($consistency==false) {
+            return Redirect::to('judgment/criteria')->with('error', 'Criteria judgments empty / not consistent. Please set the judgments!');
         }
 
+        // Convert judgments into matrix
         $i=0;
         foreach (Criterion::with('comparecriteria')->get() as $criteria)
         {
@@ -171,7 +192,6 @@ class PairwisecomparisonsController extends \BaseController {
         $normalization = Ahp::normalization($judgments, $judgmentTotal, $max);
         $normalizationTotal = Ahp::total($normalization, $max);
         $tpv = Ahp::tpv($normalization, $max);
-            // $rating = Ahp::rating($tpv, $max);
         $Ax = Ahp::Ax($judgments, $tpv, $max);
         $lamda = Ahp::lamda($Ax, $tpv, $max);
         $lamdaMax = array_sum($lamda) / $max;
@@ -184,7 +204,6 @@ class PairwisecomparisonsController extends \BaseController {
             'normalization' => $normalization,
             'normalizationTotal' => $normalizationTotal,
             'tpv' => $tpv,
-                // 'rating' => $rating,
             'Ax' => $Ax,
             'lamda' => $lamda,
             'lamdaMax' => $lamdaMax,
@@ -201,7 +220,12 @@ class PairwisecomparisonsController extends \BaseController {
             $criteria = Criterion::all();
             foreach ($criteria as $key => $criterion) {
                 $consistency = 'Consistent';
-                foreach (Subcriterion::where('criterion_id', $criterion->criterion_id)->get() as $subcriterion) {
+                $subcriteria = Subcriterion::where('criterion_id', $criterion->criterion_id)->get();
+                $totalSubcriteria = count($subcriteria);
+                if ($totalSubcriteria==0) {
+                    $consistency = 'Not Consistent';
+                }
+                foreach ($subcriteria as $subcriterion) {
                     if ($subcriterion->rating == 0) {
                         $consistency = 'Not Consistent';
                     }
@@ -211,21 +235,14 @@ class PairwisecomparisonsController extends \BaseController {
             $this->layout->content = View::make('judgments.index')->with('criteria', $criteria);
         } else {
             // Show the pairwise comparisons / judgments
-            // $subcriteria = Subcriterion::where('criterion_id', $criterion_id)->with('comparesubcriteria')->get();
-            // $max = count($subcriteria);
-            // foreach ($subcriteria as $key => $value) {
-            //     $comparecriteria = $value->comparecriteria;
-            //     if ($max != $comparecriteria) {
-            //         return Redirect::to('judgment/subcriteria/'.$criterion_id);
-            //     }
-            // }
-            foreach (Subcriterion::where('criterion_id', $criterion_id)->get() as $subcriterion) {
-                if ($subcriterion->rating == 0) {
-                    return Redirect::to('judgment/subcriteria/'.$criterion_id);
-                }
+            
+            // Check consistency
+            $consistency = Ahp::consistency($criterion_id);
+            if ($consistency==false) {
+                return Redirect::to('judgment/subcriteria/'.$criterion_id)->with('error', 'Subcriteria judgments empty / not consistent. Please set the judgments!');
             }
 
-
+            // Convert judgments into matrix
             $i=0;
             foreach (Subcriterion::where('criterion_id', $criterion_id)->with('comparesubcriteria')->get() as $subcriteria)
             {
@@ -243,12 +260,14 @@ class PairwisecomparisonsController extends \BaseController {
             $normalizationTotal = Ahp::total($normalization, $max);
             $tpv = Ahp::tpv($normalization, $max);
             $rating = Ahp::rating($tpv, $max);
+            $weight = Ahp::weight($rating, $criterion_id, $max);
             $Ax = Ahp::Ax($judgments, $tpv, $max);
             $lamda = Ahp::lamda($Ax, $tpv, $max);
             $lamdaMax = array_sum($lamda) / $max;
             $CI = ($lamdaMax - $max) / ($max - 1);
             $CR = $CI / $this->RI[$max];
             $this->layout->content = View::make('pairwisecomparisons.subcriteria')->with(array(
+                'criterion_id' => $criterion_id,
                 'subcriteria' => $subcriteria,
                 'judgments' => $judgments,
                 'judgmentTotal' => $judgmentTotal,
@@ -256,6 +275,7 @@ class PairwisecomparisonsController extends \BaseController {
                 'normalizationTotal' => $normalizationTotal,
                 'tpv' => $tpv,
                 'rating' => $rating,
+                'weight' => $weight,
                 'Ax' => $Ax,
                 'lamda' => $lamda,
                 'lamdaMax' => $lamdaMax,
@@ -264,8 +284,6 @@ class PairwisecomparisonsController extends \BaseController {
                 'CR' => $CR
                 ));
         }
-
-        
     }
 
 }

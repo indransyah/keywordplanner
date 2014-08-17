@@ -11,10 +11,16 @@
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
+@if (Session::has('error'))
+<div class="alert alert-danger alert-block fade in alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>{{ Session::get('error') }}</strong>
+</div>
+@endif
 <h1 class="page-header" style="margin-top:0;">Subriteria Judgments</h1>
-@if(count($subcriteria)<2)
+@if(count($subcriteria)<3)
 <div class="alert alert-info alert-bold-border fade in alert-dismissable text-center">
-    <strong>Subcriteria must be at least 2 criteria!</strong>
+    <strong>Subcriteria must be at least 3 subcriterion!</strong>
 </div>
 @else
 <div class="row">

@@ -19,7 +19,8 @@ class CriteriaController extends \BaseController {
 	{
 
 		$criteria = Criterion::all();
-        $this->layout->content = View::make('criteria.index')->with('criteria', $criteria);
+		$consistency = Ahp::criteriaConsistency();
+        $this->layout->content = View::make('criteria.index')->with('criteria', $criteria)->with('consistency', $consistency);
 	}
 
 	/**
@@ -80,12 +81,13 @@ class CriteriaController extends \BaseController {
 	public function show($id)
 	{
 		$criterion = Criterion::find($id);
-        // $subcriterias = Subcriteria::all();
+        $consistency = Ahp::subcriteriaConsistency($id);
         $subcriteria = Subcriterion::where('criterion_id', '=', $id)->get();
         $this->layout->content = View::make('criteria.show')->with(array(
-            'id' => $id,
+            'criterion_id' => $id,
             'criterion' => $criterion,
-            'subcriteria' => $subcriteria
+            'subcriteria' => $subcriteria,
+            'consistency' => $consistency
             )
         );
 	}
@@ -142,9 +144,22 @@ class CriteriaController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
+		$criteria = Criterion::with('comparecriteria')->get();
+		
+		// Delete criteria judgments
+		foreach ($criteria as $key => $value) {
+			$criterion = Criterion::find($value['criterion_id']);
+			$criterion->comparecriteria()->detach($value['compared_criterion_id'], array('judgment' => $value['judgment']));
+		}
+		// Delete criteria
 		$criterion = Criterion::find($id);
         $criterion->delete();
-        DB::table('criteria_judgments')->delete();
+        
+        // Reset TPV
+        foreach ($criteria as $criterion) {
+        	$criterion->tpv = 0;
+        	$criterion->save();
+        }
         return Redirect::to('criteria')
                         ->with('success', 'Criterion successfully deleted!');
 	}
