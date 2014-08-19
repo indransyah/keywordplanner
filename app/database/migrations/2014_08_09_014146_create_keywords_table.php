@@ -22,6 +22,8 @@ class CreateKeywordsTable extends Migration {
 			$table->string('csv',50);
 			$table->integer('word');
 			$table->decimal('score',5,2);
+			$table->integer('campaign_id')->unsigned();
+			$table->foreign('campaign_id')->references('campaign_id')->on('campaigns')->onDelete('cascade')->onUpdate('cascade');
 			/* Old fields
 			$table->increments('keyword_id');
 			$table->string('group',20);

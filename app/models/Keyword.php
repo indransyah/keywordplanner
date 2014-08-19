@@ -17,4 +17,9 @@ class Keyword extends \Eloquent {
         // 'plan' => 'required',
         // 'extract' => 'sometimes'
     );
+
+    public function campaign()
+    {
+        return $this->belongsTo('Campaign', 'campaign_id', 'campaign_id');
+    }
 }

@@ -35,29 +35,29 @@ class HomeController extends BaseController {
 		// }
 		// return count($criteria->comparecriteria);
 
-		$conditional='word';
-		$value = 'word';
-		$range = explode('-', $conditional);
-		if (count($range)==2) {
-			if ($this->range($value, $range[0], $range[1])) {
-				return 'dalam';
-			} else {
-				return 'luar';
-			}
-		} else {
-			if ($value==$conditional) {
-				return 'ok';
-			}
-		}
+		// $conditional='word';
+		// $value = 'word';
+		// $range = explode('-', $conditional);
+		// if (count($range)==2) {
+		// 	if ($this->range($value, $range[0], $range[1])) {
+		// 		return 'dalam';
+		// 	} else {
+		// 		return 'luar';
+		// 	}
+		// } else {
+		// 	if ($value==$conditional) {
+		// 		return 'ok';
+		// 	}
+		// }
 		// return count($range);
 
-		// $this->layout->content = View::make('dashboard');
+		$this->layout->content = View::make('dashboard');
 	}
 
-	public function range($value, $min, $max){
-		if($value < $min) return false;
-		if($value > $max) return false;
-		return true;
-	}
+	// public function range($value, $min, $max){
+	// 	if($value < $min) return false;
+	// 	if($value > $max) return false;
+	// 	return true;
+	// }
 
 }

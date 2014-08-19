@@ -35,7 +35,9 @@
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-default btn-sm" href="{{ URL::to('pairwisecomparison/subcriteria/' . $value->criterion_id) }}" data-toggle="tooltip" data-placement="left" title="Show subcriteria judgments">
-                                        <i class="glyphicon glyphicon-th-list"></i>
+                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                        <!-- <i class="glyphicon glyphicon-th-list"></i> -->
+
                                     </a>
                                     <!-- <a class="btn {{$value->consistency=='Consistent' ? 'btn-success' : 'btn-danger' }} btn-sm active" data-toggle="tooltip" data-placement="right" title="Subcriteria judgments {{$value->consistency}}">
                                         {{$value->consistency}}

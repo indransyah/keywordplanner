@@ -31,4 +31,5 @@ Route::group(array('before' => 'auth'), function()
     Route::delete('subcriteria/{id}/{criterion_id}', array('uses' => 'SubcriteriaController@destroy'));
 	Route::resource('subcriteria', 'SubcriteriaController', array('except' => 'show'));
 	Route::controller('judgment', 'JudgmentsController');
+	Route::controller('campaign', 'CampaignsController');
 });

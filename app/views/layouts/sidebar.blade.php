@@ -2,9 +2,13 @@
     <ul class="stacked-menu">
         <li{{ Request::segment(1)=='home' ? ' class="active"' : '' }}>{{ HTML::link('home', 'Home') }}</li>
         <li><a href="#">Keywords <i class="fa fa-angle-down right-icon"></i></a>
-            <ul{{ Request::segment(1)=='keyword' ? ' style="display: block;"' : '' }}>
+            <ul{{ Request::segment(1)=='keyword' || Request::segment(1)=='campaign' ? ' style="display: block;"' : '' }}>
                 <li{{ Request::segment(1)=='keyword' && Request::segment(2)=='import' ? ' class="active"' : '' }}>{{ HTML::link('keyword/import', 'Add Keyword') }}</li>
+                @if(Auth::check())
+                <li{{ Request::segment(1)=='campaign' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('campaign', 'View Campaigns') }}</li>
+                @else
                 <li{{ Request::segment(1)=='keyword' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('keyword', 'View Keywords') }}</li>
+                @endif
             </ul>
         </li>
         @if(Auth::check())
@@ -26,10 +30,10 @@
                 <li{{ Request::segment(1)=='judgment' && Request::segment(2)=='subcriteria' ? ' class="active"' : '' }}>{{ HTML::link('judgment/subcriteria', 'Subcriteria') }}</li>
             </ul>
         </li> -->
-        <li><a href="#">User <i class="fa fa-angle-down right-icon"></i></a>
+        <li><a href="#">Users <i class="fa fa-angle-down right-icon"></i></a>
             <ul{{ Request::segment(1)=='user' ? ' style="display: block;"' : '' }}>
                 <li{{ Request::segment(1)=='user' && Request::segment(3)=='edit' ? ' class="active"' : '' }}>{{ HTML::link('user/profile', 'Profile') }}</li>
-                <li{{ Request::segment(1)=='user' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('user', 'User') }}</li> 
+                <li{{ Request::segment(1)=='user' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('user', 'Users') }}</li> 
             </ul>
         </li>
         @endif

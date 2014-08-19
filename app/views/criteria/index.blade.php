@@ -69,7 +69,7 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a class="btn btn-default btn-sm" href="{{ URL::to('criteria/' . $value->criterion_id) }}" data-toggle="tooltip" data-placement="left" title="Show subcriterias">
-                                        <i class="glyphicon glyphicon-indent-left"></i>
+                                        <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                     <a class="btn btn-info btn-sm" href="{{ URL::to('criteria/' . $value->criterion_id. '/edit') }}" data-toggle="tooltip" data-placement="top" title="Edit criteria">
                                         <i class="glyphicon glyphicon-pencil"></i>

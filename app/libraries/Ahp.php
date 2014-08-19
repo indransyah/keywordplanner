@@ -6,10 +6,37 @@ class Ahp {
 		return 'Test Ahp';
 	}
 
-    public function range($value, $min, $max){
+    public static function range($value, $min, $max){
         if($value < $min) return false;
         if($value > $max) return false;
         return true;
+    }
+
+    public static function subcriteriaWeight($criterion_id, $keyword) {
+        $criterion = Criterion::find($criterion_id);
+        $weight = 0;
+        foreach ($criterion->subcriteria as $key => $subcriterion) {
+            $range = explode('-', $subcriterion->conditional);
+            if (count($range)==2) {
+                if (self::range($keyword[$criterion->field], $range[0], $range[1])) {
+                    $weight = $subcriterion->weight+$weight;
+                }
+            } else {
+                if ($keyword[$criterion->field]==$conditional) {
+                    $weight = $subcriterion->weight+$weight;
+                }
+            }
+        }
+        return $weight;
+    }
+
+    public static function keywordScore($keyword) {
+        $criteria = Criterion::all();
+        $score = 0;
+        foreach ($criteria as $key => $criterion) {
+            $score = self::subcriteriaWeight($criterion->criterion_id, $keyword)+$score;
+        }
+        return $score;
     }
 
     public static function criteriaConsistency() {
@@ -19,6 +46,9 @@ class Ahp {
             if ($criterion->tpv==0) {
                 $consistency = false;
             }
+        }
+        if (count($criteria)==0) {
+            $consistency = false;
         }
         return $consistency;
     }
@@ -34,6 +64,21 @@ class Ahp {
         return $consistency;
     }
 
+    public static function allConsistency() {
+        $criteriaConsistency = self::criteriaConsistency();
+        if (!$criteriaConsistency) {
+            return false;
+        }
+        $criteria = Criterion::all();
+        foreach ($criteria as $key => $criterion) {
+            $subcriteriaConsistency = self::subcriteriaConsistency($criterion->criterion_id);
+            if (!$subcriteriaConsistency) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static function process($keyword) {
         // $fields = (word, search, competition, bid);
         $criteria = Criterion::all();
@@ -42,7 +87,7 @@ class Ahp {
                 $range = explode('-', $subcriterion->conditional);
                 $tmp = 0;
                 if (count($range)==2) {
-                    if ($this->range($keyword[$criterion->field], $range[0], $range[1])) {
+                    if (self::range($keyword[$criterion->field], $range[0], $range[1])) {
                         $tmp = $subcriterion->weight+$tmp;
                     }
                 } else {

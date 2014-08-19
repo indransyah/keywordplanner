@@ -16,10 +16,6 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>Make sure you import csv file from <a href="http://adwords.google.com" class="alert-link">Google AdWords Keyword Planner!</a></strong>
 </div>
-@elseif ($consistency==false)
-<div class="alert alert-danger square alert-block fade in alert-dismissable">
-    <strong>Criteria / subcriteria judgments not consistent. Please set the judgments first!</strong>
-</div>
 @endif
 <h1 class="page-header" style="margin-top:0;">Import Keywords</h1>
 <!-- Impor Keyword -->
@@ -32,6 +28,10 @@
         <button type="submit" class="btn btn-success {{$consistency==false ? 'disabled' : ''}}"><i class="glyphicon glyphicon-plus"></i> Import</button>
         {{ Form::close() }}
     </div>
+</div>
+@elseif ($consistency==false)
+<div class="alert alert-danger square alert-block fade in alert-dismissable text-center">
+    <strong>Criteria / subcriteria judgments not consistent. Please set the judgments first!</strong>
 </div>
 @endif
 <!-- / Impor Keyword -->
