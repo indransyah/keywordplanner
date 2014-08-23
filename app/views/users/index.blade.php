@@ -6,7 +6,7 @@
     <li class="active">User</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>

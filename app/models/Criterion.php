@@ -5,7 +5,7 @@ class Criterion extends \Eloquent {
     protected $primaryKey = 'criterion_id';
     public $timestamps = false;
     public static $rules = array(
-        'criterion' => 'required|unique:criteria,criterion|max:30',
+        'criterion' => 'required|max:30|unique:criteria,criterion',
         'description' => 'required|max:200',
         'field' => 'required|unique:criteria,field'
     );

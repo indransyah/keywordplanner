@@ -7,13 +7,13 @@
     <li class="active">Criteria</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 @if (Session::has('error'))
-<div class="alert alert-danger alert-block fade in alert-dismissable">
+<div class="alert alert-danger fade in alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('error') }}</strong>
 </div>
@@ -21,8 +21,8 @@
 <h1 class="page-header" style="margin-top:0;">Criteria Judgments</h1>
 <!-- Kriteria -->
 @if(count($criteria)<3)
-<div class="alert alert-info alert-bold-border fade in alert-dismissable text-center">
-    <strong>Criteria must be at least 3 criterion!</strong>
+<div class="alert alert-warning square fade in alert-dismissable text-center">
+    <strong>Criteria must be at least 3 criteria!</strong>
 </div>
 @else
 <div class="row">

@@ -19,8 +19,7 @@ class CriteriaController extends \BaseController {
 	{
 
 		$criteria = Criterion::all();
-		$consistency = Ahp::criteriaConsistency();
-        $this->layout->content = View::make('criteria.index')->with('criteria', $criteria)->with('consistency', $consistency);
+        $this->layout->content = View::make('criteria.index')->with('criteria', $criteria);
 	}
 
 	/**
@@ -81,13 +80,11 @@ class CriteriaController extends \BaseController {
 	public function show($id)
 	{
 		$criterion = Criterion::find($id);
-        $consistency = Ahp::subcriteriaConsistency($id);
         $subcriteria = Subcriterion::where('criterion_id', '=', $id)->get();
         $this->layout->content = View::make('criteria.show')->with(array(
             'criterion_id' => $id,
             'criterion' => $criterion,
-            'subcriteria' => $subcriteria,
-            'consistency' => $consistency
+            'subcriteria' => $subcriteria
             )
         );
 	}
@@ -118,7 +115,10 @@ class CriteriaController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$validator = Validator::make(Input::all(), Criterion::$rules);
+		$rules = Criterion::$rules;
+        $rules['criterion'] .= ',' . $id . ',criterion_id';
+        $rules['field'] .= ',' . $id . ',criterion_id';
+		$validator = Validator::make(Input::all(), $rules);
         if ($validator->passes()) {
             $criterion = Criterion::find($id);
             $criterion->criterion = Input::get('criterion');

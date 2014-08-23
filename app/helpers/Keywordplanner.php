@@ -41,7 +41,7 @@ class Keywordplanner {
 				}
 			}
 			$arr[$index]['word'] = str_word_count($value['keyword']);
-			$arr[$index]['score'] = Ahp::keywordScore($value);
+			// $arr[$index]['score'] = Ahp::keywordscore($value);
 		}
 		return $arr;
 	}
@@ -55,7 +55,31 @@ class Keywordplanner {
 		return $campaignName;
 	}
 
-	public static function deleteCampaign($campaignName) {
+	public static function updateCampaign($campaignName, $filename) {
+		$campaign = Campaign::where('csv', $filename)->first();
+		if (count($campaign) == 0) {
+			$campaign = new Campaign;
+	        $campaign->campaign = $campaignName;
+	        $campaign->csv = $filename;
+	        $campaign->user_id = Auth::user()->user_id;
+	        $campaign->save();
+		} else {
+			Keyword::where('campaign_id', $campaign->campaign_id)->delete();
+		}
+		
+		/*$campaign = Campaign::where('csv', $filename)->count();
+		if ($campaign == 0) {
+			$campaign = new Campaign;
+	        $campaign->campaign = $campaignName;
+	        $campaign->csv = $filename;
+	        $campaign->user_id = Auth::user()->user_id;
+	        $campaign->save();
+		} else {
+			Keyword::where('csv', $filename)->delete();
+		}*/
+	}
+
+	/*public static function deleteCampaign($campaignName) {
 		$campaigns = Campaign::all();
 		foreach ($campaigns as $key => $campaign) {
 			if ($campaign->csv == $filename) {
@@ -65,13 +89,13 @@ class Keywordplanner {
 		}
 	}
 
-	public static function addCampaign($campaignName) {
+	public static function addCampaign($campaignName, $filename) {
 		$campaign = new Campaign;
         $campaign->campaign = $campaignName;
         $campaign->csv = $filename;
         $campaign->user_id = Auth::user()->user_id;
         $campaign->save();
-	}
+	}*/
 
 	public static function uploadCsv() {
         if (Input::hasFile('csv')) {

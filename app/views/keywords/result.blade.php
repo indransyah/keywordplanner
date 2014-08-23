@@ -11,9 +11,37 @@
 </div>
 @endif
 {{ HTML::ul($errors->all()) }}
+
+@if (Ahp::allConsistency())
+<a class="btn btn-success pull-right" data-toggle="modal" data-target="#recommendedKeywordModal" data-toggle="tooltip" data-placement="right" title="Show recommended keywords!">
+    Show recommended keywords!
+</a>
+<div class="modal fade" id="recommendedKeywordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">RECOMMENDED KEYWORDS</h4>
+            </div>
+            <div class="modal-body">
+                <textarea name="clipboard-text" id="clipboard-text" class="form-control" rows="10">
+@for ($i = 0; $i < 20; $i++)
+{{ $keywords[$i]['keyword'] }}
+@endfor
+                </textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" id="target-to-copy" data-clipboard-target="clipboard-text">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <h1 class="page-header" style="margin-top:0;">Keywords</h1>
 <!-- Keyword -->
-@if ($consistency==true)
+@if (Ahp::allConsistency())
 <div class="the-box full">
     <div class="table-responsive">
         <table class="table table-info table-hover table-th-block">
@@ -91,4 +119,9 @@
 </div>
 @endif
 <!-- / Keyword -->
+
+// Script
+{{ HTML::script('assets/plugins/zero-clipboard/ZeroClipboard.js') }}
+{{ HTML::script('assets/plugins/zero-clipboard/main.js') }}
+
 @stop

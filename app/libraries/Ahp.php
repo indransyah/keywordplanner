@@ -2,9 +2,44 @@
 
 class Ahp {
 	
-	public static function test() {
-		return 'Test Ahp';
-	}
+	public static function campaignExistency() {
+        $campaign = Campaign::where('user_id', Auth::user()->user_id)->count();
+        if ($campaign == 0) {
+            return false;
+        } else {
+            return true;
+        }
+        
+    }
+
+    public static function criteriaExistency() {
+        $criteria = Criterion::all()->count();
+        if ($criteria < 3) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static function subcriteriaExistency($criterion_id = null) {
+        if (empty($criterion_id)) {
+            $criteria = Criterion::all();
+            foreach ($criteria as $criterion) {
+                if (count($criterion->subcriteria) < 3) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        } else {
+            $criterion = Criterion::find($criterion_id);
+            if (count($criterion->subcriteria) < 3) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
 
     public static function range($value, $min, $max){
         if($value < $min) return false;
@@ -22,7 +57,7 @@ class Ahp {
                     $weight = $subcriterion->weight+$weight;
                 }
             } else {
-                if ($keyword[$criterion->field]==$conditional) {
+                if ($keyword[$criterion->field]==$subcriterion->conditional) {
                     $weight = $subcriterion->weight+$weight;
                 }
             }
@@ -30,13 +65,22 @@ class Ahp {
         return $weight;
     }
 
-    public static function keywordScore($keyword) {
+    public static function keywordScore($keywords) {
         $criteria = Criterion::all();
         $score = 0;
-        foreach ($criteria as $key => $criterion) {
-            $score = self::subcriteriaWeight($criterion->criterion_id, $keyword)+$score;
+        foreach ($keywords as $key => $keyword) {
+            foreach ($criteria as $criterion) {
+                $score = self::subcriteriaWeight($criterion->criterion_id, $keyword)+$score;
+            }
+            $keywords[$key]['score'] = $score;
+            $score = 0;
         }
-        return $score;
+        // $criteria = Criterion::all();
+        // $score = 0;
+        // foreach ($criteria as $key => $criterion) {
+        //     $score = self::subcriteriaWeight($criterion->criterion_id, $keyword)+$score;
+        // }
+        return $keywords;
     }
 
     public static function criteriaConsistency() {
@@ -79,7 +123,7 @@ class Ahp {
         return true;
     }
 
-    public static function process($keyword) {
+    /*public static function process($keyword) {
         // $fields = (word, search, competition, bid);
         $criteria = Criterion::all();
         foreach ($criteria as $criterion) {
@@ -107,12 +151,12 @@ class Ahp {
                         $tmp = $subcriterion->weight+$tmp;
                     }
                 }
-            }*/
+            }
             // $keyword[$criterion->field]
         }
-    }
+    }*/
 
-    public static function competition($value) {
+    /*public static function competition($value) {
         switch ($value) {
             case ($value<0.33):
                 return 'Low';
@@ -126,7 +170,7 @@ class Ahp {
                 return 'High';
                 break;
         }
-        /* OLD
+        // OLD
         switch ($keyword['competition']) {
             case ($keyword['competition']<0.33):
                 return 'Low';
@@ -139,10 +183,10 @@ class Ahp {
             case ($keyword['competition']>0.67):
                 return 'High';
                 break;
-        }*/
-    }
+        }
+    }*/
 
-    public static function consistency($criterion_id = null) {
+    /*public static function consistency($criterion_id = null) {
         if (empty($criterion_id)) {
             $criteria = Criterion::all();
             $totalCriteria = count($criteria);
@@ -168,7 +212,7 @@ class Ahp {
             }
             return true;
         }
-    }
+    }*/
 
     public static function clearJudgments($criterion_id = null, $data){
         if (empty($criterion_id)) {
@@ -199,7 +243,7 @@ class Ahp {
     }
 
     // NOT USE
-    public static function saveTpvRating($criterion_id = null, $tpv){
+    /*public static function saveTpvRating($criterion_id = null, $tpv){
         if (empty($criterion_id)) {
             $criteria = Criterion::all();
             foreach ($criteria as $key => $criterion) {
@@ -220,7 +264,7 @@ class Ahp {
                 $subcriterion->save();
             }
         }
-    }
+    }*/
 
     public static function saveTpvRatingWeight($criterion_id = null, $tpv, $rating, $weight = null) {
         if (empty($criterion_id) && empty($weight)) {
@@ -240,41 +284,43 @@ class Ahp {
         }
     }
 
-    // NOT USE
-    public static function saveTpv($criterion_id = null, $tpv) {
-        if (empty($criterion_id)) {
-            $criteria = Criterion::all();
-            foreach ($criteria as $key => $criterion) {
-                $criterion->tpv = $tpv[$key];
-                $criterion->save();
-            }
-        } else {
-            $criterion = Criterion::find($criterion_id);
-            foreach ($criterion->subcriteria as $key => $subcriterion) {
-                $subcriterion->tpv = $tpv[$key];
-                $subcriterion->save();
-            }
-        }
-    }
+    // // NOT USE
+    // public static function saveTpv($criterion_id = null, $tpv) {
+    //     if (empty($criterion_id)) {
+    //         $criteria = Criterion::all();
+    //         foreach ($criteria as $key => $criterion) {
+    //             $criterion->tpv = $tpv[$key];
+    //             $criterion->save();
+    //         }
+    //     } else {
+    //         $criterion = Criterion::find($criterion_id);
+    //         foreach ($criterion->subcriteria as $key => $subcriterion) {
+    //             $subcriterion->tpv = $tpv[$key];
+    //             $subcriterion->save();
+    //         }
+    //     }
+    // }
 
-    // NOT USE
-    public static function saveRating($rating) {
-        $criterion = Criterion::find($criterion_id);
-        foreach ($criterion->subcriteria as $key => $subcriterion) {
-            $subcriterion->rating = $rating[$key];
-            $subcriterion->save();
-        }
-    }
+    // // NOT USE
+    // public static function saveRating($rating) {
+    //     $criterion = Criterion::find($criterion_id);
+    //     foreach ($criterion->subcriteria as $key => $subcriterion) {
+    //         $subcriterion->rating = $rating[$key];
+    //         $subcriterion->save();
+    //     }
+    // }
 
-    // NOT USE
-    public static function saveWeight($weight) {
-        $criterion = Criterion::find($criterion_id);
-        foreach ($criterion->subcriteria as $key => $subcriterion) {
-            $subcriterion->weight = $weight[$key];
-            $subcriterion->save();
-        }
-    }    
+    // // NOT USE
+    // public static function saveWeight($weight) {
+    //     $criterion = Criterion::find($criterion_id);
+    //     foreach ($criterion->subcriteria as $key => $subcriterion) {
+    //         $subcriterion->weight = $weight[$key];
+    //         $subcriterion->save();
+    //     }
+    // }    
 
+
+    // AHP
 	public static function total($matrix, $max) {
 		for ($i = 0; $i < $max; $i++) {
             $total[$i] = 0;

@@ -2,39 +2,9 @@
 
 class KeywordsController extends \BaseController {
 
-    function array_sort($array, $on, $order=SORT_ASC)
+    public function __construct()
     {
-        $new_array = array();
-        $sortable_array = array();
-
-        if (count($array) > 0) {
-            foreach ($array as $k => $v) {
-                if (is_array($v)) {
-                    foreach ($v as $k2 => $v2) {
-                        if ($k2 == $on) {
-                            $sortable_array[$k] = $v2;
-                        }
-                    }
-                } else {
-                    $sortable_array[$k] = $v;
-                }
-            }
-
-            switch ($order) {
-                case SORT_ASC:
-                asort($sortable_array);
-                break;
-                case SORT_DESC:
-                arsort($sortable_array);
-                break;
-            }
-
-            foreach ($sortable_array as $k => $v) {
-                $new_array[$k] = $array[$k];
-            }
-        }
-
-        return $new_array;
+        $this->beforeFilter('auth', array('except' => 'deleteDestroy'));
     }
 
 	public function getIndex()
@@ -54,58 +24,35 @@ class KeywordsController extends \BaseController {
 	}
 
     public function getShow($id) {
-        $keywords = Keyword::where('campaign_id', $id)->get();
+        $keywords = Keyword::where('campaign_id', $id)->orderBy('score', 'DESC')->paginate(20);
         $criteria = Criterion::all();
-        $this->layout->content = View::make('keywords.show')->with('keywords', $keywords)->with('criteria', $criteria);
+        $this->layout->content = View::make('keywords.result')->with('keywords', $keywords)->with('criteria', $criteria);
     }
 
     public function getResult() {
         $criteria = Criterion::all();
-        $consistency = Ahp::allConsistency();
         if (Auth::check()) {
             $keywords = Keyword::paginate(10);
-            $this->layout->content = View::make('keywords.result')->with('keywords', $keywords)->with('criteria', $criteria)->with('consistency', $consistency);
+            $this->layout->content = View::make('keywords.result')->with('keywords', $keywords)->with('criteria', $criteria);
         } else {
             if (!Session::has('keywords')) {
                 return Redirect::to('keyword/import');
             }
             $keywords = Session::get('keywords');
-            $this->layout->content = View::make('keywords.tmp')->with('keywords', $keywords)->with('criteria', $criteria)->with('consistency', $consistency);
+            $this->layout->content = View::make('keywords.tmp')->with('keywords', $keywords)->with('criteria', $criteria);
         }
     }
 
 	public function getImport()
 	{
-        // SEMENTARA DINONAKTIFKAN
-        // $consistency = true;
-        // $criteriaConsistency = Ahp::consistency();
-        // foreach (Criterion::all() as $key => $criterion) {
-        //     $subcriteriaConsistency = Ahp::consistency($criterion->criterion_id);
-        //     if ($subcriteriaConsistency==false || $criteriaConsistency==false) {
-        //         $consistency = false;              
-        //     }
-        // }
-
-        // $consistency = Ahp::criteriaConsistency(); 
-
-        // Check the consistency
-        $consistency = Ahp::allConsistency();
-		$this->layout->content = View::make('keywords.create')->with('consistency', $consistency);
+		$this->layout->content = View::make('keywords.create');
 	}
 
 	public function postStore() {
-        // SEMENTARA DINONAKTIFKAN
-        // $criteriaConsistency = Ahp::consistency();
-        // foreach (Criterion::all() as $key => $criterion) {
-        //     $subcriteriaConsistency = Ahp::consistency($criterion->criterion_id);
-        //     if ($subcriteriaConsistency==false || $criteriaConsistency==false) {
-        //         return Redirect::to('keyword/import');
-        //     }
-        // }
-
+        
         // Check the consistency
         $consistency = Ahp::allConsistency();
-        if (!consistency) {
+        if (!$consistency) {
             return Redirect::to('keyword/import');
         }
 
@@ -114,6 +61,11 @@ class KeywordsController extends \BaseController {
 
         // Convert CSV record into array
         $keywords = Keywordplanner::convertCSV($filename);
+
+        // Keyword score
+        $keywords = Ahp::keywordScore($keywords);
+        // return $keywords;
+
 
         // Check the user auth
         if(!Auth::check()) { 
@@ -124,15 +76,19 @@ class KeywordsController extends \BaseController {
         $campaignName = Keywordplanner::getCampaignName($keywords);
 
         // Delete existing campaign 
-        Keywordplanner::deleteCampaign($campaignName);
+        // Keywordplanner::deleteCampaign($campaignName);
 
         // Add a campaign
-        Keywordplanner::addCampaign($campaignName);
+        // Keywordplanner::addCampaign($campaignName, $filename);
+
+        // Update campaign
+        Keywordplanner::updateCampaign($campaignName, $filename);
 
         // Get campaign to get campaign_id
-        $campaign = Campaign::where('csv', $filename);
+        $campaign = Campaign::where('csv', $filename)->first();
+        // return $campaign->campaign_id;
 
-        foreach ($arr as $key => $value) {
+        foreach ($keywords as $key => $value) {
             $validator = Validator::make($value, Keyword::$rules);
             if ($validator->passes()) {
                 $keyword = new Keyword;
@@ -150,11 +106,12 @@ class KeywordsController extends \BaseController {
                 // $keyword->word = str_word_count($value['keyword']);
                 // $keyword->csv = $filename;
                 $keyword->word = $value['word'];
+                $keyword->score = $value['score'];
                 $keyword->campaign_id = $campaign->campaign_id;
                 $keyword->save();
             }
         }
-        return Redirect::to('keyword')->with('success', 'Keywords successfully imported!');
+        return Redirect::to('keyword/show/'.$campaign->campaign_id)->with('success', 'Keywords successfully imported!');
     }
 
     public function deleteDestroy($id) {

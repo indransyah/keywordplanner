@@ -24,6 +24,12 @@ class SubcriteriaController extends \BaseController {
 		if (empty($criterion_id)) {
             return Redirect::to('criteria');
         }
+
+        $max = count(Subcriterion::where('criterion_id', $criterion_id)->get());
+		if ($max==15) {
+			return Redirect::to('criteria')->with('error', 'Just 15 subcriteria allowed!');
+		}
+
         $criterion = Criterion::where('criterion_id', '=', $criterion_id)->count();
         if ($criterion) {
             $this->layout->content = View::make('subcriteria.create')->with('criterion_id', $criterion_id);
@@ -40,6 +46,11 @@ class SubcriteriaController extends \BaseController {
 	 */
 	public function store($criterion_id)
 	{
+		$max = count(Subcriterion::where('criterion_id', $criterion_id)->get());
+		if ($max==15) {
+			return Redirect::to('criteria')->with('error', 'Just 15 subcriteria allowed!');
+		}
+		
 		$input = Input::all();
         $rules = Subcriterion::$rules;
         $rules['subcriterion'] .= ',NULL,subcriterion_id,criterion_id,' . $criterion_id;

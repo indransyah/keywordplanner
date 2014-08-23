@@ -10,13 +10,13 @@
     <li class="active">Profile</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 @if (Session::has('error'))
-<div class="alert alert-danger square fade in alert-dismissable">
+<div class="alert alert-danger fade in alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('error') }}</strong>
     {{ HTML::ul($errors->all()) }}

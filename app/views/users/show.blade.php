@@ -1,1 +1,0 @@
-C:\Users\Indransyah\Documents\GitHub\keywordplanner\app/views/users/show.blade.php

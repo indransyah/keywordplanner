@@ -19,7 +19,7 @@ class CreateKeywordsTable extends Migration {
 			$table->integer('search');
 			$table->decimal('competition',5,2);
 			$table->decimal('bid',5,2);
-			$table->string('csv',50);
+			// $table->string('csv',50);
 			$table->integer('word');
 			$table->decimal('score',5,2);
 			$table->integer('campaign_id')->unsigned();

@@ -21,7 +21,13 @@
         <li><a href="#">Pairwise Comparisons <i class="fa fa-angle-down right-icon"></i></a>
             <ul{{ Request::segment(1)=='pairwisecomparison' || Request::segment(1)=='judgment' ? ' style="display: block;"' : '' }}>
                 <li{{ Request::segment(1)=='pairwisecomparison' && Request::segment(2)=='criteria' ? ' class="active"' : '' }}>{{ HTML::link('pairwisecomparison/criteria', 'Criteria') }}</li>
-                <li{{ Request::segment(1)=='pairwisecomparison' && Request::segment(2)=='subcriteria' ? ' class="active"' : '' }}>{{ HTML::link('pairwisecomparison/subcriteria', 'Subcriteria') }}</li>
+                <?php
+                $criteria = Criterion::all();
+                ?>
+                @foreach ($criteria as $criterion)
+                <li>{{ HTML::link('pairwisecomparison/subcriteria/'.$criterion->criterion_id, $criterion->criterion.'\'s subcriteria') }}</li>
+                @endforeach
+                <!-- <li{{ Request::segment(1)=='pairwisecomparison' && Request::segment(2)=='subcriteria' ? ' class="active"' : '' }}>{{ HTML::link('pairwisecomparison/subcriteria', 'Subcriteria') }}</li> -->
             </ul>
         </li>
         <!-- <li><a href="#">Judgments <i class="fa fa-angle-down right-icon"></i></a>

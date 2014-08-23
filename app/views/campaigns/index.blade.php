@@ -6,14 +6,15 @@
     <li class="active">Campaigns</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 <h1 class="page-header" style="margin-top:0;">Campaigns</h1>
-<div class="row">
-    <div class="col-lg-8">
+@if (Ahp::campaignExistency())
+<!-- <div class="row"> -->
+    <!-- <div class="col-lg-8"> -->
         <div class="the-box full">
             <div class="table-responsive">
                 <table class="table table-info table-th-block">
@@ -21,7 +22,7 @@
                         <tr>
                             <th style="width: 5%;">#</th>
                             <th style="width: 40%">Campaign</th>
-                            <th style="width: 10%;">CSV</th>
+                            <th style="width: 40%;" class="text-center">CSV</th>
                             <th style="width: 10%;">Action</th>
                             
                         </tr>
@@ -31,7 +32,7 @@
                         <tr>
                             <td>{{ $key+1 }}</td>
                             <td>{{ $value->campaign }}</td>
-                            <td>CSV</td>
+                            <td>{{ $value->csv }}</td>
                             <td>
 
                                 <div class="btn-group">
@@ -68,6 +69,11 @@
                 </table>
             </div><!-- /.table-responsive -->
         </div><!-- /.the-box full -->
-    </div>
+    <!-- </div> -->
+<!-- </div> -->
+@else
+<div class="alert alert-warning square fade in alert-dismissable text-center">
+    <strong>There is no campaign.</strong> <a class="alert-link" href="{{ URL::to('keyword/import') }}">Please upload csv first!</a>
 </div>
+@endif
 @stop

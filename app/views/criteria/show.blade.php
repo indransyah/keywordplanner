@@ -7,13 +7,13 @@
     <li class="active">Subcriteria</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 @if(count($subcriteria)!=0)
-    @if($consistency == true)
+    @if(Ahp::subcriteriaConsistency($criterion_id))
     <div class="btn-group pull-right">
         <a href="{{ URL::to('pairwisecomparison/subcriteria/'.$criterion_id) }}" class="btn btn-success btn-sm btn-rounded-lg" data-toggle="tooltip" data-placement="left" title="Subcriteria judgments consistent. Click to show pairwise comparisons.">
             CONSISTENT
@@ -29,7 +29,7 @@
 @endif
 <h1 class="page-header" style="margin-top:0;">{{$criterion->criterion}}'s subcriteria</h1>
 @if(count($subcriteria)==0)
-<div class="alert alert-info alert-bold-border fade in alert-dismissable text-center">
+<div class="alert alert-warning square fade in alert-dismissable text-center">
     <strong>There is no subcriterion. {{ HTML::link('subcriteria/create/'.$criterion_id, 'Add subcriterion?', array('class'=>'alert-link')) }}</strong>
     <br />	
 </div>

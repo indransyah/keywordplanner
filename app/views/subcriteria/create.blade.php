@@ -6,7 +6,7 @@
     <li class="active">Add</li>
 </ol>
 @if (Session::has('error'))
-<div class="alert alert-danger square fade in alert-dismissable">
+<div class="alert alert-danger fade in alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('error') }}</strong>
     {{ HTML::ul($errors->all()) }}
@@ -28,12 +28,6 @@
                 {{ Form::textarea('description', null, array('class'=>'form-control', 'placeholder'=>'Description', 'required'=>'true')) }}
             </div>
         </div>
-        <!-- <div class="form-group">
-            <label for="criteria" class="col-sm-2 control-label">Filter</label>
-            <div class="col-sm-10">
-                {{ Form::text('filter', null, array('class'=>'form-control', 'placeholder'=>'Filter')) }}
-            </div>
-        </div> -->
         <div class="form-group">
             <label for="criteria" class="col-sm-2 control-label">Conditional</label>
             <div class="col-sm-10">

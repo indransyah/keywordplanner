@@ -6,21 +6,21 @@
     <li class="active">Subcriteria</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 @if (Session::has('error'))
-<div class="alert alert-danger alert-block fade in alert-dismissable">
+<div class="alert alert-danger fade in alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
 <h1 class="page-header" style="margin-top:0;">Subriteria Judgments</h1>
 @if(count($subcriteria)<3)
-<div class="alert alert-info alert-bold-border fade in alert-dismissable text-center">
-    <strong>Subcriteria must be at least 3 subcriterion!</strong>
+<div class="alert alert-warning fade in alert-dismissable text-center">
+    <strong>Subcriteria must be at least 3 subcriteria!</strong>
 </div>
 @else
 <div class="row">

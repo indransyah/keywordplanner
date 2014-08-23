@@ -74,53 +74,24 @@ class PairwisecomparisonsController extends \BaseController {
         if (round($CR, 2) <= 0.1) {
             // Consistent
             if (empty($criterion_id)) {
-
                 // Delete criteria judgments
-                /*foreach ($data as $key => $value) {
-                    $criterion = Criterion::find($value['criterion_id']);
-                    $criterion->comparecriteria()->detach($value['compared_criterion_id'], array('judgment' => $value['judgment']));
-                }*/
                 Ahp::clearJudgments(null, $data);
 
                 // Add new criteria judgments
-                /*foreach ($data as $key => $value) {
-                    $criterion = Criterion::find($value['criterion_id']);
-                    $criterion->comparecriteria()->attach($value['compared_criterion_id'], array('judgment' => $value['judgment']));
-                }*/
                 Ahp::addJudgments(null, $data);
 
                 // Save TPV into database
-                /*foreach (Criterion::all() as $key => $criterion) {
-                    $criterion->tpv = $tpv[$key];
-                    $criterion->save();
-                }*/
-                // Ahp::saveTpvRating(null, $tpv);
                 Ahp::saveTpvRatingWeight(null, $tpv, $rating, null);
 
                 return Redirect::to('pairwisecomparison/criteria');
             } else {
-
                 // Delete subcriteria judgments
-                /*foreach ($data as $key => $value) {
-                    $subcriterion = Subcriterion::find($value['subcriterion_id']);
-                    $subcriterion->comparesubcriteria()->detach($value['compared_subcriterion_id'], array('judgment' => $value['judgment']));
-                }*/
                 Ahp::clearJudgments($criterion_id, $data);
 
                 // Add new subcriteria judgments
-                /*foreach ($data as $key => $value) {
-                    $subcriterion = Subcriterion::find($value['subcriterion_id']);
-                    $subcriterion->comparesubcriteria()->attach($value['compared_subcriterion_id'], array('judgment' => $value['judgment']));
-                }*/
                 Ahp::addJudgments($criterion_id, $data);
 
                 // Save TPV & Rating into database
-                /*foreach (Subcriterion::where('criterion_id', $criterion_id)->get() as $key => $subcriterion) {
-                    $subcriterion->tpv = $tpv[$key];
-                    $subcriterion->rating = $tpv[$key]/max($tpv);
-                    $subcriterion->save();
-                }*/
-                // Ahp::saveTpvRating($criterion_id, $tpv);
                 Ahp::saveTpvRatingWeight($criterion_id, $tpv, $rating, $weight);
 
                 return Redirect::to('pairwisecomparison/subcriteria/'.$criterion_id);
@@ -170,7 +141,7 @@ class PairwisecomparisonsController extends \BaseController {
     public function getCriteria()
     {
         // Check consistency
-        $consistency = Ahp::consistency();
+        $consistency = Ahp::criteriaConsistency();
         if ($consistency==false) {
             return Redirect::to('judgment/criteria')->with('error', 'Criteria judgments empty / not consistent. Please set the judgments!');
         }
@@ -232,12 +203,17 @@ class PairwisecomparisonsController extends \BaseController {
                 }
                 $criteria[$key]['consistency'] = $consistency;
             }
-            $this->layout->content = View::make('judgments.index')->with('criteria', $criteria);
+            $this->layout->content = View::make('pairwisecomparisons.index')->with('criteria', $criteria);
         } else {
             // Show the pairwise comparisons / judgments
             
+            // Check existency
+            if (Ahp::subcriteriaExistency($criterion_id) == false) {
+                return Redirect::to('subcriteria/create/'.$criterion_id)->with('error', 'Subcriteria < 3. Please add subcriterion!');
+            }
+
             // Check consistency
-            $consistency = Ahp::consistency($criterion_id);
+            $consistency = Ahp::subcriteriaConsistency($criterion_id);
             if ($consistency==false) {
                 return Redirect::to('judgment/subcriteria/'.$criterion_id)->with('error', 'Subcriteria judgments empty / not consistent. Please set the judgments!');
             }

@@ -6,24 +6,24 @@
     <li class="active">Criteria</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
 @if ($CR<=0.1)
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <strong>Pairwise Comparison CONSISTENT.</strong>
 </div>
 <div class="btn-group pull-right">
     {{ HTML::link('judgment/criteria', 'Change the criteria judgments', array('class' => 'btn btn-danger btn-rounded-lg')) }}
 </div>
 @else
-<div class="alert alert-danger square fade in alert-dismissable text-left">
+<div class="alert alert-danger fade in alert-dismissable text-left">
     <strong>Pairwise Comparison NOT CONSISTENT.</strong> Judgments are not saved in the database.
 </div>
 <div class="btn-group pull-right">
-    {{ HTML::link('pairwisecomparison/criteria', 'Show the saved pairwise comparison', array('class' => 'btn btn-success btn-rounded-lg')) }}
+    <!-- {{ HTML::link('pairwisecomparison/criteria', 'Show the saved pairwise comparison', array('class' => 'btn btn-success btn-rounded-lg')) }} -->
     {{ HTML::link('judgment/criteria', 'Change the criteria judgments', array('class' => 'btn btn-danger btn-rounded-lg')) }}
 </div>
 @endif

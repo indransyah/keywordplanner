@@ -2,7 +2,7 @@
 
 class JudgmentsController extends \BaseController {
 
-	protected $RI = array(0, 0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51);
+	// protected $RI = array(0, 0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51);
     protected $options = array(
         '1' => '1. Sama penting dengan',
         '2' => '2. Mendekati sedikit lebih penting dari',
@@ -15,10 +15,10 @@ class JudgmentsController extends \BaseController {
         '9' => '9. Mutlak sangat penting dari'
     );
 
-    public function getIndex()
+    /*public function getIndex()
     {
     	return Ahp::test();
-    }
+    }*/
 
     public function getCriteria()
     {        
@@ -37,7 +37,7 @@ class JudgmentsController extends \BaseController {
             ));
     }
 
-    public function postPairwisecomparison($criterion_id = null) 
+    /*public function postPairwisecomparison($criterion_id = null) 
     {
         if (empty($criterion_id)) {
             $items = Criterion::all();
@@ -153,6 +153,6 @@ class JudgmentsController extends \BaseController {
                 ));
             }
         }
-    }
+    }*/
 
 }
