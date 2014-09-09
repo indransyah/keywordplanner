@@ -1,11 +1,15 @@
 @extends('layouts.master')
 @section('content')
+
+{{ HTML::script('assets/plugins/zero-clipboard/ZeroClipboard.js') }}
+{{ HTML::script('assets/plugins/zero-clipboard/main.js') }}
+
 <ol class="breadcrumb">
     <li>{{ HTML::link('home', 'Home') }}</li>
     <li class="active">Keyword</li>
 </ol>
 @if (Session::has('success'))
-<div class="alert alert-success square fade in alert-dismissable text-left">
+<div class="alert alert-success fade in alert-dismissable text-left">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <strong>{{ Session::get('success') }}</strong>
 </div>
@@ -25,14 +29,16 @@
             </div>
             <div class="modal-body">
                 <textarea name="clipboard-text" id="clipboard-text" class="form-control" rows="10">
-@for ($i = 0; $i < 20; $i++)
-{{ $keywords[$i]['keyword'] }}
-@endfor
+@foreach ($recommendedKeywords as $recommendedKeyword)
+{{ $recommendedKeyword->keyword }}
+@endforeach
                 </textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-info" id="target-to-copy" data-clipboard-target="clipboard-text">Copy</button>
+                <p id="target-to-copy-text" style="display:none;">Text Copied.</p>
+
             </div>
         </div>
     </div>
@@ -69,8 +75,8 @@
                 <tr>
                     <!-- <td>{{ $value->group }}</td> -->
                     <td>{{ $value->keyword }}</td>
-                    @foreach($criteria as $key => $criterion)
-                    <td>{{ Ahp::subcriteriaWeight($criterion->criterion_id, $value) }}</td>
+                    @foreach($criteria as $criterion)
+                    <td>{{ $weights[$key][$criterion->criterion] }}</td>
                     @endforeach
                     <td>{{ $value->score }}</td>
                     <!-- <td>{{ $value->currency }}</td> -->
@@ -119,9 +125,4 @@
 </div>
 @endif
 <!-- / Keyword -->
-
-// Script
-{{ HTML::script('assets/plugins/zero-clipboard/ZeroClipboard.js') }}
-{{ HTML::script('assets/plugins/zero-clipboard/main.js') }}
-
 @stop

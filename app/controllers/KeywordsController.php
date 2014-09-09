@@ -25,8 +25,27 @@ class KeywordsController extends \BaseController {
 
     public function getShow($id) {
         $keywords = Keyword::where('campaign_id', $id)->orderBy('score', 'DESC')->paginate(20);
+        $recommendedKeywords = Keyword::where('campaign_id', $id)->orderBy('score', 'DESC')->take(20)->get();
         $criteria = Criterion::all();
-        $this->layout->content = View::make('keywords.result')->with('keywords', $keywords)->with('criteria', $criteria);
+        
+        //
+        foreach ($keywords as $key => $keyword) {
+            foreach ($criteria as $criterion) {
+                $weights[$key][$criterion->criterion] = Ahp::subcriteriaWeight($criterion->criterion_id, $keyword);
+            }
+
+            // Check score
+            $score = array_sum($weights[$key]);
+            if ($score != $keyword->score) {
+                $updatedKeyword = Keyword::find($keyword->keyword_id);
+                $updatedKeyword->score = $score;
+                $updatedKeyword->save();
+            }
+        }
+
+        // return $weights[0];
+
+        $this->layout->content = View::make('keywords.result')->with('keywords', $keywords)->with('criteria', $criteria)->with('recommendedKeywords' ,$recommendedKeywords)->with('weights', $weights);
     }
 
     public function getResult() {
