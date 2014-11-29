@@ -29,9 +29,11 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="criteria" class="col-sm-2 control-label">Conditional</label>
+            <label for="range" class="col-sm-2 control-label">Range</label>
             <div class="col-sm-10">
-                {{ Form::text('conditional', null, array('class'=>'form-control', 'placeholder'=>'Conditional', 'required'=>'true')) }}
+                {{ Form::text('range', null, array('class'=>'form-control', 'placeholder'=>'Range', 'required'=>'true')) }}
+                <small><i>Range of criterion field that belongs to subcriterion.</i></small>
+                <small><i>Allowed format :</br></small> <kbd>x</kbd>, <kbd>>x</kbd>, <kbd>x-y</kbd>, <kbd>>y</kbd></i>
             </div>
         </div>
         <div class="form-group">

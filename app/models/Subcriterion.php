@@ -7,7 +7,7 @@ class Subcriterion extends \Eloquent {
     public static $rules = array(
         'subcriterion' => 'required|max:30|unique:subcriteria,subcriterion',
         'description' => 'required|max:200',
-        'conditional' => 'required'
+        'range' => 'required'
     );
 
     public function criteria()

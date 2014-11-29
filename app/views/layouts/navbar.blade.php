@@ -11,7 +11,7 @@
             <button class="btn btn-info btn-sidebar-collapse">
                 <span class="fa fa-arrows-h"></span>
             </button>
-            <a data-scroll class="navbar-brand">Keyword Planner</a>
+            <a data-scroll class="navbar-brand">KeywordPlanner</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         @if(Auth::check())

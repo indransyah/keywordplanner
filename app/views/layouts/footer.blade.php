@@ -1,5 +1,4 @@
 <!-- MAIN JAVASRCIPT  -->
-{{ HTML::script('assets/js/jquery.js') }}
 {{ HTML::script('assets/js/bootstrap.min.js') }}
 
 <!-- PLUGINS AND NDOBOOST JS-->

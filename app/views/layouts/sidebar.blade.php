@@ -3,11 +3,11 @@
         <li{{ Request::segment(1)=='home' ? ' class="active"' : '' }}>{{ HTML::link('home', 'Home') }}</li>
         <li><a href="#">Keywords <i class="fa fa-angle-down right-icon"></i></a>
             <ul{{ Request::segment(1)=='keyword' || Request::segment(1)=='campaign' ? ' style="display: block;"' : '' }}>
-                <li{{ Request::segment(1)=='keyword' && Request::segment(2)=='import' ? ' class="active"' : '' }}>{{ HTML::link('keyword/import', 'Add Keyword') }}</li>
+                <li{{ Request::segment(1)=='keyword' && Request::segment(2)=='import' ? ' class="active"' : '' }}>{{ HTML::link('keyword/import', 'Add Keywords') }}</li>
                 @if(Auth::check())
                 <li{{ Request::segment(1)=='campaign' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('campaign', 'View Campaigns') }}</li>
                 @else
-                <li{{ Request::segment(1)=='keyword' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('keyword', 'View Keywords') }}</li>
+                <li{{ Request::segment(1)=='keyword' && Request::segment(2)=='' ? ' class="active"' : '' }}>{{ HTML::link('keyword/result', 'View Keywords') }}</li>
                 @endif
             </ul>
         </li>
@@ -20,12 +20,23 @@
         </li>
         <li><a href="#">Pairwise Comparisons <i class="fa fa-angle-down right-icon"></i></a>
             <ul{{ Request::segment(1)=='pairwisecomparison' || Request::segment(1)=='judgment' ? ' style="display: block;"' : '' }}>
-                <li{{ Request::segment(1)=='pairwisecomparison' && Request::segment(2)=='criteria' ? ' class="active"' : '' }}>{{ HTML::link('pairwisecomparison/criteria', 'Criteria') }}</li>
+            <?php
+            $status = Ahp::criteriaConsistency() ? 'color:green;' : 'color:red;';
+            ?>
+                <li{{ Request::segment(1)=='pairwisecomparison' && Request::segment(2)=='criteria' ? ' class="active"' : '' }}>{{ HTML::link('pairwisecomparison/criteria', 'Criteria', array('style'=>$status)) }}</li>
                 <?php
                 $criteria = Criterion::all();
                 ?>
                 @foreach ($criteria as $criterion)
-                <li>{{ HTML::link('pairwisecomparison/subcriteria/'.$criterion->criterion_id, $criterion->criterion.'\'s subcriteria') }}</li>
+                <?php
+                $consistency = Ahp::subcriteriaConsistency($criterion->criterion_id);
+                if ($consistency) {
+                    $status = 'color:green;';
+                } else {
+                    $status = 'color:red;';
+                }
+                ?>
+                <li>{{ HTML::link('pairwisecomparison/subcriteria/'.$criterion->criterion_id, $criterion->criterion.'\'s subcriteria', array('style'=>$status)) }}</li>
                 @endforeach
                 <!-- <li{{ Request::segment(1)=='pairwisecomparison' && Request::segment(2)=='subcriteria' ? ' class="active"' : '' }}>{{ HTML::link('pairwisecomparison/subcriteria', 'Subcriteria') }}</li> -->
             </ul>

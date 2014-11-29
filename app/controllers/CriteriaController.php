@@ -5,8 +5,8 @@ class CriteriaController extends \BaseController {
 	protected $fields = array(
         'word' => 'Word',
         'search' => 'Search',
-        'bid' => 'BID',
-        'competition' => 'Competition'
+        'competition' => 'Competition',
+        'bid' => 'BID'
     );
 
 	/**
@@ -59,6 +59,10 @@ class CriteriaController extends \BaseController {
             $criterion->description = Input::get('description');
             $criterion->field = Input::get('field');
             $criterion->save();
+
+            // Change campaigns status
+            Keywordplanner::outofdateCampaigns();
+
             return Redirect::to('criteria')
                             ->with('success', 'Criterion successfully added!');
         } else {
@@ -125,6 +129,10 @@ class CriteriaController extends \BaseController {
             $criterion->description = Input::get('description');
             $criterion->field = Input::get('field');
             $criterion->save();
+
+            // Change campaigns status
+            Keywordplanner::outofdateCampaigns();
+
             return Redirect::to('criteria')->with('success', 'Criterion successfully edited!');
         } else {
             return Redirect::to('criteria/' . $id . '/edit')
@@ -160,6 +168,13 @@ class CriteriaController extends \BaseController {
         	$criterion->tpv = 0;
         	$criterion->save();
         }
+
+        // Clear subcriteria weight
+        Ahp::clearSubcriteriaWeight();
+
+        // Change campaigns status
+        Keywordplanner::outofdateCampaigns();
+
         return Redirect::to('criteria')
                         ->with('success', 'Criterion successfully deleted!');
 	}

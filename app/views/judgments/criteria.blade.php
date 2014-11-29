@@ -3,7 +3,7 @@
 
 <ol class="breadcrumb">
     <li>{{ HTML::link('home', 'Home') }}</li>
-    <li>{{ HTML::link('judgment', 'Judgment') }}</li>
+    <li>{{ HTML::link('judgment', 'Judgments') }}</li>
     <li class="active">Criteria</li>
 </ol>
 @if (Session::has('success'))
@@ -44,7 +44,7 @@
                         @for ($j = $i+1; $j < count($criteria); $j++)
                         <tr>
                             <td id="label|{{ $criteria[$i]->criterion_id.'-'.$criteria[$j]->criterion_id }}">{{ $criteria[$i]->criterion }}</td>
-                            <td>{{ Form::select($criteria[$i]->criterion_id.'-'.$criteria[$j]->criterion_id, $options, null, array('class'=>'form-control','id'=>$criteria[$i]->criterion_id.'-'.$criteria[$j]->criterion_id)) }}</td>
+                            <td>{{ Form::select($criteria[$i]->criterion_id.'-'.$criteria[$j]->criterion_id, $options, null, array('class'=>'form-control','id'=>$criteria[$i]->criterion_id.'-'.$criteria[$j]->criterion_id, 'autocomplete'=>'off')) }}</td>
                             <td id="label|{{ $criteria[$j]->criterion_id.'-'.$criteria[$i]->criterion_id }}">{{ $criteria[$j]->criterion }}</td>
                             <td class="text-center">
                                 <a class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="right" title="Reverse the criterion" onclick="reverse({{$criteria[$i]->criterion_id}},{{$criteria[$j]->criterion_id}})">

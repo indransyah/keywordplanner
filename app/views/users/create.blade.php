@@ -2,7 +2,7 @@
 @section('content')
 <ol class="breadcrumb">
     <li>{{ HTML::link('home', 'Home') }}</li>
-    <li>{{ HTML::link('user', 'User') }}</li>
+    <li>{{ HTML::link('user', 'Users') }}</li>
     <li class="active">Add</li>
 </ol>
 @if (Session::has('error'))

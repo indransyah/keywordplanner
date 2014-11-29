@@ -45,7 +45,7 @@
                             <!-- <th>ID</th> -->
                             <th style="width: 15%;">Subriteria</th>
                             <th style="width: 30%;">Description</th>
-                            <th style="width: 10%;">Conditional</th>
+                            <th style="width: 10%;">Range</th>
                             <th style="width:10%;">TPV</th>
                             <th style="width:10%;">Rating</th>
                             <th style="width:10%;">Weight</th>
@@ -60,7 +60,7 @@
                             <!-- <td data-toggle="tooltip" data-placement="top" title="{{ $value->description }}">{{ $value->subcriterion }}</td> -->
                             <td>{{ $value->subcriterion }}</td>
                             <td>{{ $value->description }}</td>
-                            <td>{{ $value->conditional }}</td>
+                            <td>{{ $value->range }}</td>
                             <td>{{ $value->tpv }}</td>
                             <td>{{ $value->rating }}</td>
                             <td>{{ $value->weight }}</td>

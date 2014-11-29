@@ -49,9 +49,10 @@
                             <th style="width: 5%;">#</th>
                             <!-- <th>ID</th> -->
                             <th style="width: 15%;">Criteria</th>
-                            <th style="width: 45%;">Description</th>
+                            <th style="width: 35%;">Description</th>
                             <th style="width: 10%;">Used Field</th>
-                            <th style="width: 10%;">TPV</th>
+                            <th style="width: 5%;">TPV</th>
+                            <th class="text-center" style="width: 15%;">Subcriteria Status</th>
                             <th class="text-center" style="width: 15%;">Actions</th>
                         </tr>
                     </thead>
@@ -66,6 +67,15 @@
                             <td>{{ $value->description }}</td>
                             <td>{{ $value->field }}</td>
                             <td>{{ $value->tpv }}</td>
+                            <?php
+                            $consistency = Ahp::subcriteriaConsistency($value->criterion_id);
+                            if ($consistency) {
+                                $status = '<span class="label label-success">CONSISTENT</span>';
+                            } else {
+                                $status = '<span class="label label-danger">NOT CONSISTENT</span>';
+                            }
+                            ?>
+                            <td class="text-center">{{ $status }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a class="btn btn-default btn-sm" href="{{ URL::to('criteria/' . $value->criterion_id) }}" data-toggle="tooltip" data-placement="left" title="Show subcriterias">

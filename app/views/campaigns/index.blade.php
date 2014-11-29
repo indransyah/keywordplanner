@@ -36,7 +36,7 @@
                             <td>
 
                                 <div class="btn-group">
-                                    <a class="btn btn-default btn-sm" href="{{ URL::to('keyword/show/' . $value->campaign_id) }}">
+                                    <a class="btn btn-default btn-sm" href="{{ URL::to('campaign/show/' . $value->campaign_id) }}">
                                         <i class="glyphicon glyphicon-eye-open"></i>
                                     </a>
                                     <a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal-{{ $value->campaign_id }}" data-toggle="tooltip" data-placement="right" title="Delete criteria">
@@ -71,6 +71,10 @@
         </div><!-- /.the-box full -->
     <!-- </div> -->
 <!-- </div> -->
+@elseif (!Ahp::allConsistency())
+<div class="alert alert-warning square fade in alert-dismissable text-center">
+    <strong>Criteria / subcriteria judgments not consistent. Cannot show the keyword results</strong>
+</div>
 @else
 <div class="alert alert-warning square fade in alert-dismissable text-center">
     <strong>There is no campaign.</strong> <a class="alert-link" href="{{ URL::to('keyword/import') }}">Please upload csv first!</a>

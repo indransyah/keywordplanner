@@ -17,7 +17,7 @@ class CreateSubcriteriaTable extends Migration {
 			$table->increments('subcriterion_id');
 			$table->string('subcriterion',20);
 			$table->longText('description');
-			$table->string('conditional',50);
+			$table->string('range',50);
 			$table->decimal('tpv',5,2);
 			$table->decimal('rating',5,2);
 			$table->decimal('weight',5,2);

@@ -51,6 +51,7 @@ class UsersController extends \BaseController {
 
 	public function postLogin() {
         if (Auth::attempt(array('username' => Input::get('username'), 'password' => Input::get('password')), true)) {
+            Session::forget('filter');
             return Redirect::to('home')
                             ->with('success', 'You are now logged in!');
         } else {
@@ -62,6 +63,7 @@ class UsersController extends \BaseController {
 
     public function getLogout() {
         Auth::logout();
+        Session::flush();
         return Redirect::to('user/login')->with('error', 'Your are now logged out!');
     }
 

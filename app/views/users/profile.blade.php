@@ -5,7 +5,7 @@
         {{ HTML::link('home', 'Home') }}
     </li>
     <li>
-        {{ HTML::link('user', 'User') }}
+        {{ HTML::link('user', 'Users') }}
     </li>
     <li class="active">Profile</li>
 </ol>

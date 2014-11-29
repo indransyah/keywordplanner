@@ -2,7 +2,7 @@
 @section('content')
 <ol class="breadcrumb">
     <li>{{ HTML::link('home', 'Home') }}</li>
-    <li>{{ HTML::link('judgment', 'Judgment') }}</li>
+    <li>{{ HTML::link('judgment', 'Judgments') }}</li>
     <li class="active">Subcriteria</li>
 </ol>
 @if (Session::has('success'))
@@ -17,7 +17,7 @@
     <strong>{{ Session::get('error') }}</strong>
 </div>
 @endif
-<h1 class="page-header" style="margin-top:0;">Subriteria Judgments</h1>
+<h1 class="page-header" style="margin-top:0;">{{$criterion->criterion}}'s Judgments</h1>
 @if(count($subcriteria)<3)
 <div class="alert alert-warning fade in alert-dismissable text-center">
     <strong>Subcriteria must be at least 3 subcriteria!</strong>
@@ -25,7 +25,7 @@
 @else
 <div class="row">
     <div class="col-lg-8">
-        {{ Form::open(array('url'=>'pairwisecomparison/process/'.$criterion_id, 'class'=>'form-horizontal')) }}
+        {{ Form::open(array('url'=>'pairwisecomparison/process/'.$criterion->criterion_id, 'class'=>'form-horizontal')) }}
         <div class="the-box full">
             <div class="table-responsive">
                 <table class="table table-info table-hover table-th-block">
@@ -42,7 +42,7 @@
                         @for ($j = $i+1; $j < count($subcriteria); $j++)
                         <tr>
                             <td id="label|{{ $subcriteria[$i]->subcriterion_id.'-'.$subcriteria[$j]->subcriterion_id }}">{{ $subcriteria[$i]->subcriterion }}</td>
-                            <td>{{ Form::select($subcriteria[$i]->subcriterion_id.'-'.$subcriteria[$j]->subcriterion_id, $options, null, array('class'=>'form-control','id'=>$subcriteria[$i]->subcriterion_id.'-'.$subcriteria[$j]->subcriterion_id)) }}
+                            <td>{{ Form::select($subcriteria[$i]->subcriterion_id.'-'.$subcriteria[$j]->subcriterion_id, $options, null, array('class'=>'form-control','id'=>$subcriteria[$i]->subcriterion_id.'-'.$subcriteria[$j]->subcriterion_id, 'autocomplete'=>'off')) }}
                             </td>
                             <td id="label|{{ $subcriteria[$j]->subcriterion_id.'-'.$subcriteria[$i]->subcriterion_id }}">{{ $subcriteria[$j]->subcriterion }}</td>
                             <td class="text-center">

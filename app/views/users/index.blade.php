@@ -3,7 +3,7 @@
 
 <ol class="breadcrumb">
     <li>{{ HTML::link('home', 'Home') }}</li>
-    <li class="active">User</li>
+    <li class="active">Users</li>
 </ol>
 @if (Session::has('success'))
 <div class="alert alert-success fade in alert-dismissable text-left">
@@ -11,7 +11,7 @@
     <strong>{{ Session::get('success') }}</strong>
 </div>
 @endif
-<h1 class="page-header" style="margin-top:0;">Criteria</h1>
+<h1 class="page-header" style="margin-top:0;">Users</h1>
 <!-- User -->
 <div class="the-box full">
 	<div class="table-responsive">

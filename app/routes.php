@@ -16,6 +16,7 @@ Route::pattern('criterion_id', '[0-9]+');
 
 Route::get('/', 'HomeController@getIndex');
 Route::controller('home', 'HomeController');
+Route::controller('help', 'HelpController');
 Route::controller('keyword', 'KeywordsController');
 
 Route::controller('user', 'UsersController');

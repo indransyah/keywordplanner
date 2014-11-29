@@ -3,6 +3,7 @@
 class PairwisecomparisonsController extends \BaseController {
 
 	protected $RI = array(0, 0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51);
+    
     protected $options = array(
         '1' => '1. Sama penting dengan',
         '2' => '2. Mendekati sedikit lebih penting dari',
@@ -14,6 +15,11 @@ class PairwisecomparisonsController extends \BaseController {
         '8' => '8. Mendekati mutlak dari',
         '9' => '9. Mutlak sangat penting dari'
     );
+
+    public function getIndex()
+    {
+        return Redirect::to('pairwisecomparison/criteria');
+    }
 
     public function postProcess($criterion_id = null)
     {
@@ -83,6 +89,10 @@ class PairwisecomparisonsController extends \BaseController {
                 // Save TPV into database
                 Ahp::saveTpvRatingWeight(null, $tpv, $rating, null);
 
+                // Change campaigns status
+                Keywordplanner::outofdateCampaigns();
+
+
                 return Redirect::to('pairwisecomparison/criteria');
             } else {
                 // Delete subcriteria judgments
@@ -93,6 +103,9 @@ class PairwisecomparisonsController extends \BaseController {
 
                 // Save TPV & Rating into database
                 Ahp::saveTpvRatingWeight($criterion_id, $tpv, $rating, $weight);
+
+                // Change campaigns status
+                Keywordplanner::outofdateCampaigns();
 
                 return Redirect::to('pairwisecomparison/subcriteria/'.$criterion_id);
             }            
@@ -116,9 +129,10 @@ class PairwisecomparisonsController extends \BaseController {
                     'CR' => $CR
                 ));
             } else {
+                $criterion = Criterion::find($criterion_id);
                 // Show Subcriteria Pairwise Comparisons
                 $this->layout->content = View::make('pairwisecomparisons.subcriteria')->with(array(
-                    'criterion_id' => $criterion_id,
+                    'criterion' => $criterion,
                     'subcriteria' => $items,
                     'judgments' => $judgments,
                     'judgmentTotal' => $judgmentTotal,
@@ -242,8 +256,9 @@ class PairwisecomparisonsController extends \BaseController {
             $lamdaMax = array_sum($lamda) / $max;
             $CI = ($lamdaMax - $max) / ($max - 1);
             $CR = $CI / $this->RI[$max];
+            $criterion = Criterion::find($criterion_id);
             $this->layout->content = View::make('pairwisecomparisons.subcriteria')->with(array(
-                'criterion_id' => $criterion_id,
+                'criterion' => $criterion,
                 'subcriteria' => $subcriteria,
                 'judgments' => $judgments,
                 'judgmentTotal' => $judgmentTotal,

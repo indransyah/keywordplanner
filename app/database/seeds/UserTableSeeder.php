@@ -9,7 +9,7 @@ class UserTableSeeder extends Seeder {
 			'name'     => 'Administrator',
 			'username' => 'admin',
 			'email'    => 'admin@keywordplanner.com',
-			'password' => Hash::make('insyde'),
+			'password' => Hash::make('admin'),
 		));
 
 		User::create(array(

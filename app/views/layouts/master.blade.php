@@ -19,6 +19,8 @@
 		{{ HTML::style('assets/plugins/owl-carousel/owl.carousel.css') }}
 		{{ HTML::style('assets/plugins/owl-carousel/owl.theme.css') }}
 		{{ HTML::style('assets/plugins/owl-carousel/owl.transitions.css') }}
+
+        {{ HTML::script('assets/js/jquery.js') }}
         <title>Keyword Planner - Google AdWords Keyword Planner</title>
         <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900' rel='stylesheet' type='text/css'>
         {{ HTML::style('assets/css/dashboard.css') }}

@@ -33,6 +33,7 @@
             <label for="field" class="col-sm-2 control-label">Field</label>
             <div class="col-sm-10">
                 {{ Form::select('field', $fields, null, array('class'=>'form-control','required'=>'true')) }}
+                <small><i>Field is the keyword's field in the csv that belongs to criterion</i></small>
             </div>
         </div>
         <div class="form-group">

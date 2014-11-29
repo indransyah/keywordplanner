@@ -17,6 +17,7 @@ class CreateCampaignsTable extends Migration {
 			$table->increments('campaign_id');
 			$table->string('campaign',100);
 			$table->string('csv',50);
+			$table->enum('status', array('up to date', 'out of date'));
 			$table->integer('user_id')->unsigned();
 			$table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade')->onUpdate('cascade');
 		});

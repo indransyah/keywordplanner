@@ -59,9 +59,13 @@ class SubcriteriaController extends \BaseController {
             $subcriterion = new Subcriterion;
             $subcriterion->subcriterion = Input::get('subcriterion');
             $subcriterion->description = Input::get('description');
-            $subcriterion->conditional = Input::get('conditional');
+            $subcriterion->range = Input::get('range');
             $subcriterion->criterion_id = $criterion_id;
             $subcriterion->save();
+            
+            // Change campaigns status
+            Keywordplanner::outofdateCampaigns();
+
             return Redirect::to('criteria/' . $criterion_id)
                             ->with('success', 'Subcriterion successfully added!');
         } else {
@@ -111,8 +115,12 @@ class SubcriteriaController extends \BaseController {
             $subcriterion = Subcriterion::find($id);
             $subcriterion->subcriterion = Input::get('subcriterion');
             $subcriterion->description = Input::get('description');
-            $subcriterion->conditional = Input::get('conditional');
+            $subcriterion->range = Input::get('range');
             $subcriterion->save();
+
+            // Change campaigns status
+            Keywordplanner::outofdateCampaigns();
+
             return Redirect::to('criteria/' . $criterion_id)
                             ->with('success', 'Subcriterion successfully edited!');
         } else {
@@ -151,6 +159,10 @@ class SubcriteriaController extends \BaseController {
         	$subcriterion->weight = 0;
         	$subcriterion->save();
         }
+
+        // Change campaigns status
+        Keywordplanner::outofdateCampaigns();
+
         return Redirect::to('criteria/' . $criterion_id)
                         ->with('success', 'Subcriterion successfully deleted!');
 	}
